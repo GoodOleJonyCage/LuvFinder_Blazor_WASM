@@ -13,7 +13,7 @@ namespace LuvFinder_Blazor_WASM.Services
         Task Logout();
     }
 
-    public class AuthenticationService : IAuthenticationService
+    public class AuthenticationService : IAuthenticationService 
     {
         private IHttpService _httpService;
         private NavigationManager _navigationManager;
