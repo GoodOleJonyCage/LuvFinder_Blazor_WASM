@@ -1,0 +1,10 @@
+﻿@page "/logout"
+@using LuvFinder_Blazor_WASM.Services;
+@inject IAuthenticationService AuthenticationService
+
+@code {
+    protected override async void OnInitialized()
+    {
+        await AuthenticationService.Logout();
+    }
+}
