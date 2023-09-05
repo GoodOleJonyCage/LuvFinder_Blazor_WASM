@@ -1,5 +1,6 @@
 using LuvFinder_Blazor_WASM.Models;
 using Microsoft.AspNetCore.Components;
+using System.Text.Json;
 using System.Threading.Tasks;
 using static System.Net.WebRequestMethods;
 
@@ -38,6 +39,8 @@ namespace LuvFinder_Blazor_WASM.Services
 
         public async Task Login(string username, string password)
         {
+            var cars =  await _httpService.Get<Root>("https://vpic.nhtsa.dot.gov/api/vehicles/getallmanufacturers?format=json");
+            //Debug the below line to see why its not working
             //User = await _httpService.Post<User>("/users/authenticate", new { username, password });
             User = new User() { Id = 8, FirstName = "Maqsood", LastName = "Khan", Token = "12345", Username = "himan_sa@yahoo.com" };
             await _localStorageService.SetItem("user", User);

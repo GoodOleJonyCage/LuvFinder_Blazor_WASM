@@ -9,7 +9,9 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace LuvFinder_Blazor_WASM.Services
 {
@@ -76,7 +78,6 @@ namespace LuvFinder_Blazor_WASM.Services
                 var error = await response.Content.ReadFromJsonAsync<Dictionary<string, string>>();
                 throw new Exception(error["message"]);
             }
-
             return await response.Content.ReadFromJsonAsync<T>();
         }
     }
