@@ -1,4 +1,3 @@
-using LuvFinder_Blazor_WASM.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -58,10 +57,10 @@ namespace LuvFinder_Blazor_WASM.Services
         private async Task<T> sendRequest<T>(HttpRequestMessage request)
         {
             // add jwt auth header if user is logged in and request is to the api url
-            var user = await _localStorageService.GetItem<User>("user");
-            var isApiUrl = !request.RequestUri.IsAbsoluteUri;
-            if (user != null && isApiUrl)
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", user.Token);
+            var user = await _localStorageService.GetItem<LuvFinder_ViewModels.User>("user");
+            //var isApiUrl = !request.RequestUri.IsAbsoluteUri;
+            //if (user != null && isApiUrl)
+            //    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", user.Token);
 
             using var response = await _httpClient.SendAsync(request);
 
@@ -75,8 +74,10 @@ namespace LuvFinder_Blazor_WASM.Services
             // throw exception on error response
             if (!response.IsSuccessStatusCode)
             {
-                var error = await response.Content.ReadFromJsonAsync<Dictionary<string, string>>();
-                throw new Exception(error["message"]);
+               var error =  await response.Content.ReadAsStringAsync();
+               throw new Exception(error);
+                //var error = await response.Content.ReadFromJsonAsync<Dictionary<string, string>>();
+                //throw new Exception(error["message"]);
             }
             return await response.Content.ReadFromJsonAsync<T>();
         }

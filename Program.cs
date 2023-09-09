@@ -8,8 +8,7 @@ using System;
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
-
-
+ 
 builder.Services
                .AddScoped<IAuthenticationService, AuthenticationService>()
                .AddScoped<IUserService, UserService>()
@@ -17,18 +16,18 @@ builder.Services
                .AddScoped<ILocalStorageService, LocalStorageService>();
 
  // configure http client
-            builder.Services.AddScoped(x => {
-                var apiUrl = new Uri(builder.Configuration["apiUrl"]);
+            //builder.Services.AddScoped(x => {
+            //    var apiUrl = new Uri(builder.Configuration["apiUrl"]);
 
-                // use fake backend if "fakeBackend" is "true" in appsettings.json
-                if (builder.Configuration["fakeBackend"] == "true")
-                    return new HttpClient(new FakeBackendHandler()) { BaseAddress = apiUrl };
+            //    // use fake backend if "fakeBackend" is "true" in appsettings.json
+            //    //if (builder.Configuration["fakeBackend"] == "true")
+            //    //    return new HttpClient(new FakeBackendHandler()) { BaseAddress = apiUrl };
 
-                return new HttpClient() { BaseAddress = apiUrl };
-            });
+            //    return new HttpClient() { BaseAddress = apiUrl };
+            //});
 
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7186/") });
 
 
 var host = builder.Build();

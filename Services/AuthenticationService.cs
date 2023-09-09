@@ -1,4 +1,4 @@
-using LuvFinder_Blazor_WASM.Models;
+
 using Microsoft.AspNetCore.Components;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -8,7 +8,7 @@ namespace LuvFinder_Blazor_WASM.Services
 {
     public interface IAuthenticationService
     {
-        User User { get; }
+        LuvFinder_ViewModels.User User { get; }
         Task Initialize();
         Task Login(string username, string password);
         Task Logout();
@@ -20,7 +20,7 @@ namespace LuvFinder_Blazor_WASM.Services
         private NavigationManager _navigationManager;
         private ILocalStorageService _localStorageService;
 
-        public User User { get; private set; }
+        public LuvFinder_ViewModels.User User { get; private set; }
 
         public AuthenticationService(
             IHttpService httpService,
@@ -34,15 +34,19 @@ namespace LuvFinder_Blazor_WASM.Services
 
         public async Task Initialize()
         {
-            User = await _localStorageService.GetItem<User>("user");
+            User = await _localStorageService.GetItem<LuvFinder_ViewModels.User>("user");
         }
 
         public async Task Login(string username, string password)
         {
-            var cars =  await _httpService.Get<Root>("https://vpic.nhtsa.dot.gov/api/vehicles/getallmanufacturers?format=json");
+            //var cars =  await _httpService.Get<Root>("https://vpic.nhtsa.dot.gov/api/vehicles/getallmanufacturers?format=json");
+            //var data  = await _httpService.Get<WeatherForecast[]>("/WeatherForecast");
+            //var data = await _httpService.Get<WeatherForecast[]>("/User/login");
             //Debug the below line to see why its not working
-            //User = await _httpService.Post<User>("/users/authenticate", new { username, password });
-            User = new User() { Id = 8, FirstName = "Maqsood", LastName = "Khan", Token = "12345", Username = "himan_sa@yahoo.com" };
+
+
+
+            User = await _httpService.Post<LuvFinder_ViewModels.User>("/user/login", new { username, password });
             await _localStorageService.SetItem("user", User);
         }
 
