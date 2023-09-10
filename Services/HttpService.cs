@@ -48,6 +48,8 @@ namespace LuvFinder_Blazor_WASM.Services
         public async Task<T> Post<T>(string uri, object value)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, uri);
+           // request.Headers.Add("Access-Control-Allow-Origin", "*");
+            //request.Headers.Add("Access-Control-Allow-Credentials", "true");
             request.Content = new StringContent(JsonSerializer.Serialize(value), Encoding.UTF8, "application/json");
             return await sendRequest<T>(request);
         }
@@ -61,7 +63,9 @@ namespace LuvFinder_Blazor_WASM.Services
             //var isApiUrl = !request.RequestUri.IsAbsoluteUri;
             //if (user != null && isApiUrl)
             //    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", user.Token);
-            request.Headers.Add("Access-Control-Allow-Origin", "*");
+            //request.Headers.Add("Access-Control-Allow-Origin", "*");
+            //request.Headers.Add("Access-Control-Allow-Credentials", "true");
+            //request.Headers.Add("Access-Control-Allow-Origin", "http://localhost:7186/");
             using var response = await _httpClient.SendAsync(request);
             // auto logout on 401 response
             if (response.StatusCode == HttpStatusCode.Unauthorized)

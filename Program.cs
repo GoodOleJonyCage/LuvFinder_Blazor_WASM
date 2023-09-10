@@ -25,7 +25,7 @@ builder.Services
 //    //if (builder.Configuration["fakeBackend"] == "true")
 //    //    return new HttpClient(new FakeBackendHandler()) { BaseAddress = apiUrl };
 //    //var apiUrl = new ConfigurationBuilder().AddJsonFile("/appsettings.json").Build().GetSection("AppSettings")["apiUrl"];
-//    return new HttpClient() { BaseAddress =  apiUrl  };
+//    return new HttpClient() { BaseAddress = apiUrl };
 //});
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7186/") });
 
