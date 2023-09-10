@@ -43,9 +43,6 @@ namespace LuvFinder_Blazor_WASM.Services
             //var data  = await _httpService.Get<WeatherForecast[]>("/WeatherForecast");
             //var data = await _httpService.Get<WeatherForecast[]>("/User/login");
             //Debug the below line to see why its not working
-
-
-
             User = await _httpService.Post<LuvFinder_ViewModels.User>("/user/login", new { username, password });
             await _localStorageService.SetItem("user", User);
         }

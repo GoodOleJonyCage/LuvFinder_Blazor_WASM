@@ -61,9 +61,8 @@ namespace LuvFinder_Blazor_WASM.Services
             //var isApiUrl = !request.RequestUri.IsAbsoluteUri;
             //if (user != null && isApiUrl)
             //    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", user.Token);
-
+            request.Headers.Add("Access-Control-Allow-Origin", "*");
             using var response = await _httpClient.SendAsync(request);
-
             // auto logout on 401 response
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {

@@ -25,4 +25,10 @@
     <ProjectReference Include="..\LuvFinder_ViewModels\LuvFinder_ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
