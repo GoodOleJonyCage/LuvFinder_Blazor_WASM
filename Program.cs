@@ -13,6 +13,7 @@ builder.Services
                .AddScoped<IAuthenticationService, AuthenticationService>()
                .AddScoped<IUserService, UserService>()
                .AddScoped<IProfileService, ProfileService>()
+               .AddScoped<IChatService, ChatService>()
                .AddScoped<IHttpService, HttpService>()
                .AddScoped<ILocalStorageService, LocalStorageService>();
 

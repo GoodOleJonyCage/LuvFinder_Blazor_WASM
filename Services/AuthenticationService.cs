@@ -52,7 +52,7 @@ namespace LuvFinder_Blazor_WASM.Services
         {
             User = null;
             await _localStorageService.RemoveItem("user");
-            _navigationManager.NavigateTo("login");
+            _navigationManager.NavigateTo("home");
         }
     }
 }

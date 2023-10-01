@@ -1,4 +1,6 @@
-﻿@inject NavigationManager navigationManager
+﻿@using LuvFinder_Blazor_WASM.Services;
+@inject NavigationManager navigationManager
+@inject IAuthenticationService AuthenticationService
 
 <div class="col-xl-2 col-lg-3 col-md-4 col-6">
     <div class="profile-item-container lab-item member-item style-1">
@@ -22,7 +24,10 @@
                     </div>
                 </div>
             </div>
-            @* <ProfileIcons username={props.profile.userName}></ProfileIcons> *@
+            @if (AuthenticationService.User != null)
+            {
+                <ProfileIcons UserProfile="@Profile"></ProfileIcons>
+            }
         </div>
     </div>
 </div>

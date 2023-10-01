@@ -1,5 +1,6 @@
 ﻿@using LuvFinder_Blazor_WASM.Services;
 @inject IProfileService ProfileService
+@inject IAuthenticationService AuthenticationService
 
 <div class="row justify-content-center g-3 g-md-4 ">
     
@@ -23,7 +24,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        profiles = await ProfileService.LoadProfles("");
+        profiles = await ProfileService.LoadProfles(AuthenticationService.User == null ? string.Empty : AuthenticationService.User.UserName);
     }
 
 }

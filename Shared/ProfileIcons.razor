@@ -1,5 +1,67 @@
-﻿<h3>ProfileIcons</h3>
+﻿@using LuvFinder_Blazor_WASM.Services;
+@using LuvFinder_ViewModels;
+@inject IAuthenticationService AuthenticationService
+@inject IChatService ChatService
+@inject IProfileService ProfileService
+
+<div class="profile-item-icons">
+    <i @onclick="() => ChatMessage(AuthenticationService.User.UserName, UserProfile.UserName)"
+       class="@(chatinvitation ? "fas fa-comment-alt fa-heart-red" : "fas fa-comment-alt")">
+    </i>
+    <i class="@(friend ? "fas fa-user-friends fa-heart-red" : "fas fa-user-friends")" tooltip="You liked them and they accepted your friendship, so you are friends"></i>
+    <i class="@(likedby ? "fa-solid fa-shield-heart fa-heart-red" : "fa-solid fa-shield-heart")" tooltip="They liked you"></i>
+    <i class="@(like ? "fa fa-heart heart-icon fa-heart-red" : "fa fa-heart heart-icon")" tooltip="You liked them"
+    @onclick="() => LikeUser(AuthenticationService.User.UserName, UserProfile.UserName)"></i>
+    <div class="highlight-error text-center">@error</div>
+</div>
+
 
 @code {
 
+    [Parameter]
+    public UserInfo? UserProfile { get; set; }
+
+    bool friend = false;
+    bool chatinvitation = false;
+    bool like = false;
+    bool likedby = false;
+    string error = string.Empty;
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        chatinvitation = await ChatService.GetChatInvitationStatus(AuthenticationService.User.UserName, UserProfile.UserName);
+        like = await ProfileService.GetLikeUserStatus(AuthenticationService.User.UserName, UserProfile.UserName);
+        likedby = await ProfileService.GetLikeUserStatus(UserProfile.UserName, AuthenticationService.User.UserName);
+        friend = await ChatService.AreFriends(AuthenticationService.User.UserName, UserProfile.UserName);
+        //return base.OnInitializedAsync();
+    }
+
+    private async void ChatMessage(string loggedInUser, string profileName)
+    {
+        try
+        {
+            chatinvitation = await ChatService.AddChatMessage(loggedInUser, profileName, "Wana chat?");
+            if (chatinvitation)
+                StateHasChanged();
+        }
+        catch (Exception e)
+        {
+            error = e.Message;
+        }
+    }
+
+    private async void LikeUser(string loggedInUser, string profileName)
+    {
+        try
+        {
+            like = await ProfileService.LikeUser(loggedInUser, profileName);
+            if (like)
+                StateHasChanged();
+        }
+        catch (Exception e)
+        {
+            error = e.Message;
+        }
+    }
 }
