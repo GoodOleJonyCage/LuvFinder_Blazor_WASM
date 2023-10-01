@@ -1,0 +1,72 @@
+﻿@using LuvFinder_ViewModels;
+
+<div class="info-card mb-20">
+    <div class="info-card-title">
+        <h6>Base Info</h6>
+    </div>
+    <div class="info-card-content profile-form">
+        <ul class="info-list">
+            <li>
+                <p class="info-name">First Name</p>
+                <p class="info-details">
+                    <label>@UserInfo?.FirstName</label>
+                </p>
+            </li>
+            <li>
+                <p class="info-name">Last Name</p>
+                <p class="info-details">
+                    <label>@UserInfo?.LastName</label>
+                </p>
+            </li>
+            <li>
+                <p class="info-name">I'm a</p>
+                <p class="info-details">
+                    <label>@UserInfo?.Gender</label>
+                </p>
+            </li>
+            <li>
+                <p class="info-name">Loking for a</p>
+                <p class="info-details">
+                    <label>@UserInfo?.SeekingGenderID</label>
+                </p>
+            </li>
+            <li>
+                <p class="info-name">Marital Status</p>
+                <p class="info-details">
+                    <label>@UserInfo?.MaritalStatus</label>
+                </p>
+            </li>
+            <li>
+                <p class="info-name">Age</p>
+                <p class="info-details">
+                    <label>@UserInfo?.Age</label>
+                </p>
+            </li>
+            <li>
+                <p class="info-name">Address</p>
+                <div class="info-details">
+                    <div class="mb-3 region-container-viewmode">
+                        <div>Country</div>
+                        <label>@UserInfo?.CountryName</label>
+                    </div>
+                    <div class="mb-3 region-container-viewmode">
+                        <div>Region</div>
+                        <label>@UserInfo?.RegionName</label>
+                    </div>
+                    <div class="mb-3 region-container-viewmode">
+                        <div>City</div>
+                        <label>@UserInfo?.CityName</label>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public UserInfo? UserInfo { get; set; }
+
+}

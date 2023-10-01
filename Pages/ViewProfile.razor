@@ -1,13 +1,16 @@
 ﻿@* @page "/viewprofile" *@
-@page "/viewprofile/{ProfileID:int}"
-
+@page "/viewprofile/{UserName}"
+@using LuvFinder_Blazor_WASM.Services;
+@using LuvFinder_ViewModels;
+@inject IProfileService ProfileService
+@inject IAuthenticationService AuthenticationService
 
   <section class="profile-section padding-tb" style="padding-top:12%;">
         <div class="container">
             <div class="section-wrapper">
                 <div class="member-profile">
-                   <div>BannerInfo</div>
-                    <div class="profile-details"> 
+                <BannerInfo UserInfo="@UserInfo"></BannerInfo>
+                <div class="profile-details"> 
                         <nav class="profile-nav">
                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
                             <button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab"
@@ -26,7 +29,7 @@
                                     <div class="row">
                                         <div class="col-xl-8">
                                             <article>
-                                        <div>Basic Info</div>
+                                        <BasicInfo UserInfo="@UserInfo"></BasicInfo>
                                         <div>Profile Questons</div>
                                             </article>
                                         </div>
@@ -61,8 +64,17 @@
 
 
 @code {
-    
-    
+
+
     [Parameter]
-    public int? ProfileID { get; set; }
+    public string? UserName { get; set; }
+
+    private UserInfo UserInfo { get; set; }
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        UserInfo = await ProfileService.UserInfo(UserName);
+
+    }
 }

@@ -1,0 +1,28 @@
+﻿@using LuvFinder_ViewModels;
+
+<div class="profile-item">
+    <div class="profile-cover">
+        <img src="assets/images/profile/cover.jpg" alt="cover-pic" />
+    </div>
+    <div class="profile-information">
+        <div class="profile-pic">
+            <img src=@UserInfo?.ProfilePic alt="DP" />
+        </div>
+        <div class="profile-name">
+            <h4>@UserInfo?.FirstName @UserInfo?.LastName (@UserInfo?.Age) @UserInfo?.Gender</h4>
+            <div class="profile-location">
+                <div>@UserInfo?.CityName</div>
+                <div>@UserInfo?.RegionName</div>
+                <div>@UserInfo?.CountryName</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    
+    [Parameter]
+    public UserInfo? UserInfo { get; set; }
+   
+}
