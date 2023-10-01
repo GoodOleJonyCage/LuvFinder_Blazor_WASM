@@ -1,0 +1,12 @@
+﻿@* @page "/viewprofile" *@
+@page "/viewprofile/{ProfileID:int}"
+<div style="clear:both"></div>
+<h1>Hello</h1>
+<div style="padding-top:270px">good day ! @ProfileID</div>
+
+@code {
+    
+    
+    [Parameter]
+    public int? ProfileID { get; set; }
+}

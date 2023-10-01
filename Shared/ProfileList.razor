@@ -1,0 +1,29 @@
+﻿@using LuvFinder_Blazor_WASM.Services;
+@inject IProfileService ProfileService
+
+<div class="row justify-content-center g-3 g-md-4 ">
+    
+    @if(profiles.Count == 0)
+    {
+         <div class="highlight-error text-center">Loading</div>
+    }
+    else
+    {
+        foreach (var profile in profiles)
+        {
+            <ProfileItem Profile=@profile></ProfileItem>
+        }
+    }
+</div>
+
+@code {
+
+
+    private List<LuvFinder_ViewModels.UserInfo> profiles = new List<LuvFinder_ViewModels.UserInfo>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        profiles = await ProfileService.LoadProfles("");
+    }
+
+}

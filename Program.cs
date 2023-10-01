@@ -12,6 +12,7 @@ string serverlessBaseURI = builder.Configuration["apiUrl"];
 builder.Services
                .AddScoped<IAuthenticationService, AuthenticationService>()
                .AddScoped<IUserService, UserService>()
+               .AddScoped<IProfileService, ProfileService>()
                .AddScoped<IHttpService, HttpService>()
                .AddScoped<ILocalStorageService, LocalStorageService>();
 

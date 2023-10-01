@@ -1,0 +1,41 @@
+﻿@inject NavigationManager navigationManager
+
+<div class="col-xl-2 col-lg-3 col-md-4 col-6">
+    <div class="profile-item-container lab-item member-item style-1">
+        <div class="lab-inner">
+            <div @onclick="() =>  ViewProfile()" >
+                <div class="lab-thumb">
+                    <img src=@Profile.ProfilePic alt="member-img" />
+                </div>
+                <div class="lab-content profile-item">
+                    <h6>@Profile.FirstName @Profile.LastName</h6>
+                    <div>@Profile.UserName</div>
+                    <div class="profile-item-maritalstatus">
+                        <div >@Profile.MaritalStatus @Profile.Gender (@Profile.Age)</div>
+                        <div class="profile-item-maritalstatus-seeking">seeking</div>
+                        <div>@Profile.SeekingGender</div>
+                    </div>
+                    <div class="profile-item-address">
+                        <div>@Profile.CityName,</div>
+                        <div>@Profile.RegionName</div>
+                        <div>@Profile.CountryName</div>
+                    </div>
+                </div>
+            </div>
+            @* <ProfileIcons username={props.profile.userName}></ProfileIcons> *@
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public LuvFinder_ViewModels.UserInfo? Profile { get; set; }
+
+    private void ViewProfile()
+    {
+   
+        navigationManager.NavigateTo("/viewprofile/911");
+             
+    }
+}
