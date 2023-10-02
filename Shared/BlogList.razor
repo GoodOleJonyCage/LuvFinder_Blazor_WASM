@@ -1,0 +1,42 @@
+﻿@using LuvFinder_Blazor_WASM.Services;
+@using LuvFinder_ViewModels;
+@inject IBlogService BlogService
+
+<div class="blog-wrapper ">
+    <button class="lab-btn btn-sm">Create new Blog</button>
+    @if (!Loaded)
+    {
+        <div class="highlight-error">Loading</div>
+    }
+    else if (Blogs.Count == 0 && Loaded)
+    {
+        <div class="highlight-error ">No Blogs to load</div>
+    }
+    else
+    {
+        foreach (var Blog in Blogs)
+        {
+            <Blog 
+                SetSelectedBlogID="@SetSelectedBlogID"  
+                BlogItem="@Blog" 
+                UserName="@UserName"></Blog>
+        }
+    }
+</div>
+
+
+@code {
+
+    [CascadingParameter(Name = "UserName")]
+    public string UserName { get; set; } = string.Empty;
+
+    [Parameter]
+    public List<LuvFinder_ViewModels.Blog> Blogs { get; set; } = new List<LuvFinder_ViewModels.Blog>();
+
+    [Parameter]
+    public bool Loaded { get; set; }
+
+    [Parameter]
+    public EventCallback<int> SetSelectedBlogID { get; set; }
+ 
+}

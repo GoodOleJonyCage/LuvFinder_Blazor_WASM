@@ -1,0 +1,52 @@
+﻿@using LuvFinder_Blazor_WASM.Services;
+@using LuvFinder_ViewModels;
+@inject IBlogService BlogService
+
+@if (SelectedBlogID == NO_BLOG_SELECTED)
+{
+    <BlogList Loaded="@Loaded" Blogs="@Blogs" SetSelectedBlogID="@SetSelectedBlogID"></BlogList>
+}
+else
+{
+    var blog = @Blogs.Where(b => b.ID == SelectedBlogID).SingleOrDefault();
+    <FullBlog 
+        No_Blog_Selected="NO_BLOG_SELECTED"
+        SetSelectedBlogID="@SetSelectedBlogID"  
+        Blog="@blog"></FullBlog>
+}
+
+@code {
+
+    [CascadingParameter(Name = "UserName")]
+    public string UserName { get; set; } = string.Empty;
+
+    public List<LuvFinder_ViewModels.Blog> Blogs { get; set; } = new List<LuvFinder_ViewModels.Blog>();
+
+    public bool Loaded { get; set; }
+    public string Error { get; set; } = string.Empty;
+
+    private const int NO_BLOG_SELECTED = -1;
+    public int SelectedBlogID { get; set; } = NO_BLOG_SELECTED;
+    public void SetSelectedBlogID(int blogID)
+    {
+        SelectedBlogID = blogID;
+    }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        try
+        {
+            if (!string.IsNullOrEmpty(UserName))
+            {
+                Blogs = await BlogService.Blogs(UserName);
+                Loaded = true;
+                //StateHasChanged();
+            }
+        }
+        catch (Exception exc)
+        {
+            Error = exc.Message;
+            //StateHasChanged();
+        }
+    }
+}

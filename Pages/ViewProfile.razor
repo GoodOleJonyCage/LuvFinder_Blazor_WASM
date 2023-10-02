@@ -1,5 +1,4 @@
-﻿@* @page "/viewprofile" *@
-@page "/viewprofile/{UserName}"
+﻿@page "/viewprofile/{UserName}"
 @using LuvFinder_Blazor_WASM.Services;
 @using LuvFinder_ViewModels;
 @inject IProfileService ProfileService
@@ -16,11 +15,7 @@
                             <button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab"
                                 data-bs-target="#profile" type="button" role="tab" aria-controls="profile"
                                 aria-selected="true">Profile</button>
-                            <button class="nav-link" id="nav-blogs-tab" data-bs-toggle="tab"
-                                    data-bs-target="#blogs" type="button" role="tab" aria-controls="blogs"
-                                    aria-selected="false">
-                                Blogs <span class="item-number">{count}</span>
-                            </button>
+                                <BlogCount UserName="@UserName"></BlogCount>
                         </div>
                         </nav>
                         <div class="tab-content" id="nav-tabContent">
@@ -45,7 +40,9 @@
                                     <div class="main-blog">
                                         <div class="row">
                                             <div class="col-lg-8 col-12">
-                                            <div>Blogs</div>
+                                            <CascadingValue Name="UserName" Value="@UserInfo?.UserName">
+                                                <BlogView  ></BlogView>
+                                            </CascadingValue>
                                             </div>
                                             <div class="col-lg-4 col-12">
                                             <div>Aside Search</div>

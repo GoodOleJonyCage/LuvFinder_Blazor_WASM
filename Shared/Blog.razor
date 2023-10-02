@@ -1,0 +1,54 @@
+﻿@using LuvFinder_ViewModels;
+ 
+<div class="post-item blog-item">
+    <div class="post-item-inner">
+        <div class="post-thumb">
+            <a href="blog-single.html"><img src="@BlogItem.Image" alt="blog" /></a>
+        </div>
+        <div class="post-content fullblog-container">
+            <span class=" ">
+               By <NavLink class="post-by" href="@($"viewprofile/{@UserName}")">@BlogItem.user.FirstName @BlogItem.user.LastName (@BlogItem.user.Age)</NavLink> at <span class="posted-on"> @BlogItem.CreateDate.Value.ToString("dd MMM yyyy hh:mm:ss:tt")</span>
+            </span>
+            <h3> @BlogItem.Title</h3>
+            <p class="blog-body-eclipses">@BlogItem.Body</p>
+        </div>
+        <div class="blog-footer">
+            <div class="icon-container">
+                <div class="read-link">
+                    <a class="viewall"  
+                    @onclick="@(() => SetSelectedBlogID.InvokeAsync(BlogItem.ID))"
+                    >Read More</a><i class="icofont-double-right"></i>
+                </div>
+                @* {
+                props.editMode ?
+                <div class="read-link">
+                <i class="fa-solid fa-pencil"></i><NavLink class="left" to="/editprofile/editblog" state={{ blog: props.blog }}>Edit</NavLink>
+                </div>
+                : <></>
+                } *@
+            </div>
+            @*  <a class="viewall">Read More <i class="icofont-double-right"></i></a>  *@
+            <div class="right">
+                <div class="blog-comment-info">
+                    <i class="icofont-comment"></i>
+                    <span>@BlogItem.Comments.Count</span>
+                    <span class="d-none d-sm-inline-block">Comments</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    
+    [Parameter]
+    public LuvFinder_ViewModels.Blog BlogItem { get; set; } = new LuvFinder_ViewModels.Blog();
+
+    [Parameter]
+    public string UserName { get; set; } 
+
+    [Parameter]
+    public EventCallback<int> SetSelectedBlogID { get; set; }
+
+}
