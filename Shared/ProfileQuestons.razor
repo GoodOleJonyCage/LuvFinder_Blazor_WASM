@@ -1,0 +1,73 @@
+﻿@using LuvFinder_Blazor_WASM.Services;
+@using LuvFinder_ViewModels;
+@inject IProfileService ProfileService
+
+ 
+@if (ProfileQuestions == null)
+{
+    <div class="highlight-error">Loading..</div>
+}
+else
+@foreach (var Question in ProfileQuestions)
+    {
+
+        <div class="info-card mb-20" key={index}>
+            <div class="info-card-title">
+                <h6>@Question.Question.ShortDesc</h6>
+            </div>
+            <div class="info-card-content">
+                @if (Question.Question.Answers.Count == 0)
+                {
+                    <div>
+                        <div class="mb-3">@Question.Question.Text</div>
+                        <p class="question-para">@Question.AnswerText</p>
+                    </div>
+                }
+                else
+                {
+                    <ul class="info-list">
+                        <li>
+                            <p class="info-name">@Question.Question.Text</p>
+                            <div class="info-details">
+                                @foreach (var Answer in Question.Question.Answers)
+                                {
+                                    <ul class="questionnaire_Control_container">
+                                        <li class="@(Answer.Selected ? "checkmark" : "nocheckmark")">@Answer.Text</li>
+                                    </ul>
+                                }
+                            </div>
+                        </li>
+                    </ul>
+                }
+            </div>
+        </div>
+    }
+ 
+ <div class="highlight-error">@Error</div>
+
+@code {
+
+    [Parameter]
+    public string UserName { get; set; }
+
+    public string Error { get; set; }
+
+    public List<ProfileQuestion> ProfileQuestions { get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        try
+        {
+            if (!string.IsNullOrEmpty(UserName))
+            {
+                ProfileQuestions = await ProfileService.GetUserProfile(UserName);
+                StateHasChanged();
+            }
+        }
+        catch (Exception exc)
+        {
+            Error = exc.Message;
+            StateHasChanged();
+        }
+    }
+}

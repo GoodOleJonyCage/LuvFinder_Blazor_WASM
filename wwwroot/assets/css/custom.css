@@ -23,6 +23,7 @@ body a {
     font-family: Arial;
     font-weight: bold;
     color: red;
+    text-align:center;
 }
 
 .form-group input.highlight-field {

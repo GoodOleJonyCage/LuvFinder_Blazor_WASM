@@ -4,7 +4,7 @@
 @using LuvFinder_ViewModels;
 @inject IProfileService ProfileService
 @inject IAuthenticationService AuthenticationService
-
+ 
   <section class="profile-section padding-tb" style="padding-top:12%;">
         <div class="container">
             <div class="section-wrapper">
@@ -28,10 +28,10 @@
                             <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                                     <div class="row">
                                         <div class="col-xl-8">
-                                            <article>
+                                         <article>
                                         <BasicInfo UserInfo="@UserInfo"></BasicInfo>
-                                        <div>Profile Questons</div>
-                                            </article>
+                                        <ProfileQuestons UserName="@UserInfo?.UserName"></ProfileQuestons>
+                                        </article>
                                         </div>
                                         @* {/* Aside Part */} *@
                                         <div class="col-xl-4">
@@ -60,7 +60,7 @@
             </div>
         </div>
     </section>
-
+  <div class="highlight-error">@Error</div>
 
 
 @code {
@@ -70,11 +70,18 @@
     public string? UserName { get; set; }
 
     private UserInfo UserInfo { get; set; }
-
+    public string Error { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
-        UserInfo = await ProfileService.UserInfo(UserName);
-
+        try
+        {
+            UserInfo = await ProfileService.UserInfo(UserName);
+        }
+        catch(Exception exc)
+        {
+            Error = exc.Message;
+            StateHasChanged();
+        }
     }
 }
