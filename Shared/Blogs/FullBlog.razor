@@ -32,52 +32,7 @@
                         </div>
                     </div>
                 </div>
-                @if (Blog.Comments.Count > 0)
-                {
-                    <div id="comments" class="comments">
-                        <div class="widget-title">
-                            <h3>@Blog.Comments.Count Comments</h3>
-                        </div>
-                        <ul class="comment-list">
-                            @foreach (var Comment in Blog.Comments)
-                            {
-                                <li class="comment" id="li-comment-2">
-                                    <div class="com-reply-container">
-                                        <div class="com-image">
-                                            <img alt="" src="@Comment.PostedBy.ProfilePic" class="avatar avatar-90 photo" />
-                                        </div>
-                                        @if (@Comment.ReplyTo == 0)
-                                        {
-                                            <ReplyButton 
-                                                BlogID="@Blog.ID"
-                                                UserCommented="@AuthenticationService.User.UserName" 
-                                                Comment="@Comment"></ReplyButton>
-                                        }
-                                    </div>
-                                    <div class="com-content">
-                                        <div class="com-title">
-                                            <div class="com-title-meta">
-                                                <h6>
-                                                    <NavLink href="@($"viewprofile/{@Comment.PostedBy.UserName}")">
-                                                        @Comment.PostedBy.FirstName @Comment.PostedBy.LastName (@Comment.PostedBy.Age) @Comment.PostedBy.Gender
-                                                    </NavLink>
-                                                </h6>
-                                                <span class="posted-On">@Comment.Date</span>
-                                            </div>
-
-                                        </div>
-                                        <p>@Comment.Comment</p>
-                                    </div>
-                                    @if (@Comment.ReplyTo > 0)
-                                    {
-                                        <CommentReply Comment="@Comment.Reply"></CommentReply>
-                                    }
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                }
-                @* {isLoggedIn() ? <LeaveComment usercommented={getUsername()}  ></LeaveComment> : <></>} *@
+                <BlogComments Blog="@Blog"></BlogComments>
             </div>
         </div>
     </div>

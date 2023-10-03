@@ -1,0 +1,60 @@
+﻿@using LuvFinder_Blazor_WASM.Services;
+@using LuvFinder_ViewModels;
+@inject IBlogService BlogService
+
+<div class="comment-respond mb-5">
+    <div class="add-comment">
+        <div class="widget-title">
+            <h3>Leave a Comment</h3>
+        </div>
+        <div class="comment-form">
+            <textarea @bind="@Comment"
+                      class="comment-input" id="comment-reply" name="comment" cols="45" rows="5" placeholder="Type Here Message" aria-required="true"></textarea>
+            <button @onclick="() =>   AddComment()" disabled="@DisableButton"
+                    class="lab-btn" type="submit">
+                <span>Leave Comment</span>
+            </button>
+            <div class="highlight-error"><i>@Error</i></div>
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+
+    [Parameter]
+    public string UserCommented { get; set; }
+
+    [Parameter]
+    public  Action ReloadComments { get; set; }
+
+    [Parameter]
+    public int BlogID { get; set; }
+
+    public bool DisableButton{ get; set; }
+
+    public string Comment { get; set; } = string.Empty;
+
+    public string Error { get; set; } = string.Empty;
+
+    protected async void AddComment()
+    {
+        Error = string.Empty;
+        if (Comment.Length == 0)
+        {
+            Error = "Comment Required";
+        }
+        else
+        {
+            DisableButton = true;
+            var commentAdded = await BlogService.AddBlogComment(UserCommented, BlogID, Comment, 0);
+            if (commentAdded)
+            {
+                Comment = string.Empty;
+                ReloadComments();
+                DisableButton = false;
+            }
+        }
+    }
+}

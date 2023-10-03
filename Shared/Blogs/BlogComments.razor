@@ -1,0 +1,70 @@
+﻿@using LuvFinder_Blazor_WASM.Services;
+@inject IAuthenticationService AuthenticationService
+@using LuvFinder_ViewModels;
+@inject IBlogService BlogService
+
+@if (Blog.Comments.Count > 0)
+{
+    <div id="comments" class="comments">
+        <div class="widget-title">
+            <h3>@Blog.Comments.Count Comments</h3>
+        </div>
+        <ul class="comment-list">
+            @foreach (var Comment in Blog.Comments)
+            {
+                <li class="comment" id="li-comment-2">
+                    <div class="com-reply-container">
+                        <div class="com-image">
+                            <img alt="" src="@Comment.PostedBy.ProfilePic" class="avatar avatar-90 photo" />
+                        </div>
+                        @if (@Comment.ReplyTo == 0)
+                        {
+                            <ReplyButton BlogID="@Blog.ID"
+                                         UserCommented="@AuthenticationService.User.UserName"
+                                         Comment="@Comment"
+                                         ReloadComments="@ReloadComments"></ReplyButton>
+                        }
+                    </div>
+                    <div class="com-content">
+                        <div class="com-title">
+                            <div class="com-title-meta">
+                                <h6>
+                                    <NavLink href="@($"viewprofile/{@Comment.PostedBy.UserName}")">
+                                        @Comment.PostedBy.FirstName @Comment.PostedBy.LastName (@Comment.PostedBy.Age) @Comment.PostedBy.Gender
+                                    </NavLink>
+                                </h6>
+                                <span class="posted-On">@Comment.Date.Value.ToString("dd MMM yyyy hh:mm:ss:tt")</span>
+                            </div>
+
+                        </div>
+                        <p>@Comment.Comment</p>
+                    </div>
+                    @if (@Comment.ReplyTo > 0)
+                    {
+                        <CommentReply Comment="@Comment.Reply"></CommentReply>
+                    }
+                </li>
+            }
+        </ul>
+    </div>
+}
+    @if (@AuthenticationService.User != null)
+    {
+        <LeaveComment 
+            BlogID="@Blog.ID"
+            ReloadComments="@ReloadComments"
+            UserCommented="@AuthenticationService.User.UserName"></LeaveComment>
+    }
+
+
+@code {
+    [Parameter]
+    public LuvFinder_ViewModels.Blog Blog { get; set; } = new LuvFinder_ViewModels.Blog();
+   
+    private async void ReloadComments()
+    {
+        //this action gets called from reply button and leave component component
+        Blog = await BlogService.GetBlog(Blog.user.UserName, Blog.ID);
+        StateHasChanged();
+    }
+}
