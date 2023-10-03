@@ -1,0 +1,61 @@
+﻿
+
+@if (HidereplyBtn)
+{
+    <div class="show-reply-content">
+        <div><textarea @oninput="OnInput"></textarea></div>
+        <div>
+            <button class="lab-btn btn-sm" @onclick="() => Reply()">
+                Reply
+            </button>
+            <button class="lab-btn btn-sm"
+            @onclick="()=>HideReplyButton(false)">
+                Cancel
+            </button>
+        </div>
+    </div>
+}
+else
+{
+    <span class="reply">
+        <a @onclick="()=>HideReplyButton(true)"
+            rel="nofollow" class="comment-reply-link"><i class="icofont-reply-all"></i>Reply
+        </a>
+    </span>
+}
+
+@code {
+
+    [Parameter]
+    public string UserCommented { get; set; }
+
+    [Parameter]
+    public int BlogID { get; set; }
+
+    [Parameter]
+    public  LuvFinder_ViewModels.BlogComment Comment { get; set; }
+
+    public bool HidereplyBtn { get; set; } 
+
+    public string ReplyMessage { get; set; } = string.Empty;
+
+    void OnInput(ChangeEventArgs args)
+    {
+        ReplyMessage = args.Value.ToString();
+    }
+    void HideReplyButton(bool hide)
+    {
+        HidereplyBtn = hide;
+    }
+
+    void Reply()
+    {
+        
+        @* onClick={async (e)=>
+ {
+ var result = await AddBlogComment(props.usercommented, blog.id, replymessage, props.comment.id);
+ if (result)
+ loadData();
+ }} *@
+    }
+}

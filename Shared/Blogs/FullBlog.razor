@@ -1,0 +1,95 @@
+﻿@using LuvFinder_Blazor_WASM.Services;
+@using LuvFinder_ViewModels;
+@inject IAuthenticationService AuthenticationService
+
+
+<div class="container blog-section padding-tb">
+    <div class="main-blog">
+        <div class="row">
+            <div class="col-12">
+                <div class="blog-wrapper">
+                    <div class="post-item blog-item">
+                        <div class="post-item-inner">
+                            <div class="post-thumb">
+                                <a href="blog-single.html"><img src="@Blog.Image" alt="blog" /></a>
+                            </div>
+                            <div class="post-content fullblog-container">
+                                <span class=" ">
+                                    By <NavLink class="post-by" href="@($"viewprofile/{Blog.user.UserName}")">@Blog.user.FirstName @Blog.user.LastName (@Blog.user.Age)</NavLink> at <span class="posted-on">{@Blog.CreateDate.Value.ToString("dd MMM yyyy hh:mm:ss:tt")}</span>
+                                </span>
+                                <h1>@Blog.Title</h1>
+                                <p>@Blog.Body</p>
+                            </div>
+                            <div class="blog-footer">
+                                <div class="right">
+                                    <div class="go-back-container" onclick="@(() => SetSelectedBlogID.InvokeAsync(No_Blog_Selected))">
+                                        <i class='fas fa-arrow-left'></i>
+                                        <a>Go Back</a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if (Blog.Comments.Count > 0)
+                {
+                    <div id="comments" class="comments">
+                        <div class="widget-title">
+                            <h3>@Blog.Comments.Count Comments</h3>
+                        </div>
+                        <ul class="comment-list">
+                            @foreach (var Comment in Blog.Comments)
+                            {
+                                <li class="comment" id="li-comment-2">
+                                    <div class="com-reply-container">
+                                        <div class="com-image">
+                                            <img alt="" src="@Comment.PostedBy.ProfilePic" class="avatar avatar-90 photo" />
+                                        </div>
+                                        @if (@Comment.ReplyTo == 0)
+                                        {
+                                            <ReplyButton 
+                                                BlogID="@Blog.ID"
+                                                UserCommented="@AuthenticationService.User.UserName" 
+                                                Comment="@Comment"></ReplyButton>
+                                        }
+                                    </div>
+                                    <div class="com-content">
+                                        <div class="com-title">
+                                            <div class="com-title-meta">
+                                                <h6>
+                                                    <NavLink href="@($"viewprofile/{@Comment.PostedBy.UserName}")">
+                                                        @Comment.PostedBy.FirstName @Comment.PostedBy.LastName (@Comment.PostedBy.Age) @Comment.PostedBy.Gender
+                                                    </NavLink>
+                                                </h6>
+                                                <span class="posted-On">@Comment.Date</span>
+                                            </div>
+
+                                        </div>
+                                        <p>@Comment.Comment</p>
+                                    </div>
+                                    @if (@Comment.ReplyTo > 0)
+                                    {
+                                        <CommentReply Comment="@Comment.Reply"></CommentReply>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+                @* {isLoggedIn() ? <LeaveComment usercommented={getUsername()}  ></LeaveComment> : <></>} *@
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public LuvFinder_ViewModels.Blog Blog { get; set; }
+
+    [Parameter]
+    public int No_Blog_Selected { get; set; }
+
+    [Parameter]
+    public EventCallback<int> SetSelectedBlogID { get; set; }
+}

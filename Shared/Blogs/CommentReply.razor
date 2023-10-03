@@ -1,0 +1,32 @@
+﻿@using LuvFinder_ViewModels;
+
+
+<ul class="comment-list">
+    <li class="comment even thread-even depth-1 comment" id="li-comment-3">
+        <div class="com-image">
+            <img alt="" src="@Comment.PostedBy.ProfilePic" class="avatar avatar-90 photo" height="90" width="90" />
+        </div>
+        <div class="com-content">
+            <div class="com-title">
+                <div class="com-title-meta">
+                    <h6>
+                        <NavLink href="@($"viewprofile/{@Comment.PostedBy.UserName}")">@Comment.PostedBy.FirstName @Comment.PostedBy.LastName (@Comment.PostedBy.Age) @Comment.PostedBy.Gender</NavLink>
+                    </h6>
+                    <span class="posted-On"> @Comment.Date.Value.ToString("dd MMM yyyy hh:mm:ss:tt")</span>
+                </div>
+            </div>
+            <p>@Comment.Comment</p>
+        </div>
+    </li>
+</ul>
+
+@code {
+
+    [Parameter]
+    public LuvFinder_ViewModels.BlogComment Comment { get; set; }
+
+    protected override Task OnParametersSetAsync()
+    {
+        return base.OnParametersSetAsync();
+    }
+}
