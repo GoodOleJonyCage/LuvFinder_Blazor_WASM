@@ -134,7 +134,7 @@
                     </ul>
                     <div class="login-signout-container">
                         <button class="username">
-                            <NavLink href="login">
+                            <NavLink href="@(AuthenticationService.User == null ? "login": "/editprofile")">
                                 <i class="icofont-user"></i> <span>@(AuthenticationService.User == null ? "LOG IN" : AuthenticationService.User.FirstName + AuthenticationService.User.LastName)</span>
                             </NavLink>
                         </button>
