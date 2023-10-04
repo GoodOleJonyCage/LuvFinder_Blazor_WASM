@@ -1,0 +1,73 @@
+﻿@using LuvFinder_Blazor_WASM.Services;
+@using LuvFinder_ViewModels;
+@inject IProfileService ProfileService
+
+@if (ProfileQuestions.Count == 0)
+{
+    <div class="highlight-error">Loading</div>
+}
+else
+{
+    foreach (var Question in ProfileQuestions)
+    {
+        <div class=@(Question.Question.InvalidResponse ? "info-card mb-20 highlight-body" : "info-card mb-20") >
+            <div class="info-card-title">
+                <h6>@Question.Question.ShortDesc</h6>
+            </div>
+            <div class="info-card-content">
+                 
+                @if (Question.Question.Answers.Count == 0)
+                {
+                    <div>@Question.Question.Text</div>
+                    <textarea @bind="@Question.AnswerText"
+                    class="profilequestionnaire-textarea"  rows="5" cols="5"></textarea>
+                }
+                else
+                {
+                    <ul class="info-list">
+                        <li>
+                            <p class="info-name">@Question.Question.Text</p>
+                            <div class="info-details">
+                                @foreach (var Answer in Question.Question.Answers)
+                                {
+                                    <div class="questionnaire_Control_container">
+                                        @if (Question.Question.QuestionType == QuestionType.Check)
+                                        {
+                                            <label>
+                                                <input @bind="@Answer.Selected" type="checkbox" />@Answer.Text
+                                            </label>
+                                        }
+                                        else
+                                        @if (Question.Question.QuestionType == QuestionType.Radio)
+                                        {
+                                            <label>
+                                                <input 
+                                                    name="@Question.Question.Text"
+                                                    type="radio" 
+                                                    value="@Answer.Text" 
+                                                    checked="@Answer.Selected"
+                                                @onchange="@((e) => ClearAllAnswers(Question.Question.Answers,Answer))" />
+                                                @Answer.Text
+                                            </label>
+                                        }
+                                    </div>
+                                } 
+                            </div>
+                        </li>
+                    </ul>
+               }
+            </div>
+        </div>
+    }
+}
+
+@code {
+    [Parameter]
+    public List<ProfileQuestion> ProfileQuestions { get; set; } = new List<ProfileQuestion>();
+
+    public void ClearAllAnswers(List<Answer> Answers, Answer selectedAnswer)
+    {
+        Answers.ForEach(a => a.Selected = false);
+        selectedAnswer.Selected = true;
+    }
+}
