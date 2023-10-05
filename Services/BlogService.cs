@@ -11,7 +11,7 @@ namespace LuvFinder_Blazor_WASM.Services
         Task<int> BlogCount(string username);
         Task<LuvFinder_ViewModels.Blog> GetBlog(string username, int blogid);
         Task<bool> AddBlogComment(string username, int blogid, string comment, int replyto);
-        Task<string> UpdateBlog(IBrowserFile file, int blogid, string title, string body, string username);
+        Task<string> UpdateBlog(byte[]? bytes, int blogid, string title, string body, string username);
 
     }
 
@@ -42,9 +42,9 @@ namespace LuvFinder_Blazor_WASM.Services
             return await _httpService.Post<bool>("/blog/addblogcomment", new { username,   blogid,   comment,   replyto });
         }
 
-        public async Task<string> UpdateBlog(IBrowserFile file,int blogid, string title, string body, string username)
+        public async Task<string> UpdateBlog(byte[]? bytes, int blogid, string title, string body, string username)
         {
-            return await _httpService.PostBlog<string>("/blog/editblog", file, blogid, title, body, username );
+            return await _httpService.PostBlog<string>("/blog/editblog",bytes, blogid, title, body, username );
         }
     }
 }

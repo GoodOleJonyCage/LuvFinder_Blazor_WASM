@@ -67,11 +67,20 @@
         {
             if (imgFile == null)
             {
-                error = "Please select a file to upload";
+                Status = await BlogService.UpdateBlog(null, Blog.ID, Blog.Title, Blog.Body, Blog.user.UserName);
             }
-            else
+            else if (!LuvFinder_Blazor_WASM.Helpers.Utilities.IsImage(imgFile.ContentType))
             {
-                Status = await BlogService.UpdateBlog(imgFile, Blog.ID, Blog.Title, Blog.Body, Blog.user.UserName);
+                error = "Please upload an image file";
+            }
+            else if (LuvFinder_Blazor_WASM.Helpers.Utilities.IsImage(imgFile.ContentType))
+            {
+                using MemoryStream ms = new();
+                var resized = await imgFile.RequestImageFileAsync(imgFile.ContentType, maxWidth: 500, maxHeight: 800);
+                using Stream fileStream = resized.OpenReadStream();
+                await fileStream.CopyToAsync(ms);
+
+                Status = await BlogService.UpdateBlog(ms.ToArray(), Blog.ID, Blog.Title, Blog.Body, Blog.user.UserName);
             }
         } 
         catch (Exception exc)
@@ -90,9 +99,9 @@
 
     private async Task OnInputFileChange(InputFileChangeEventArgs e)
     {
+        imgFile = e.File;
         if (LuvFinder_Blazor_WASM.Helpers.Utilities.IsImage(e.File.ContentType))
         {
-            imgFile = e.File;
             //preview uploaded image
             using MemoryStream ms = new();
             var resized = await e.File.RequestImageFileAsync(e.File.ContentType, maxWidth: 500, maxHeight: 800);

@@ -25,7 +25,7 @@ namespace LuvFinder_Blazor_WASM.Services
     public interface IHttpService
     {
         Task<T> Get<T>(string uri);
-        Task<string> PostBlog<T>(string uri, IBrowserFile file,int blogid, string title, string body, string username);
+        Task<string> PostBlog<T>(string uri, byte[]? bytes,int blogid, string title, string body, string username);
         Task<T> Post<T>(string uri, object value);
     }
 
@@ -55,34 +55,12 @@ namespace LuvFinder_Blazor_WASM.Services
         }
 
      
-        public async Task<string> PostBlog<T>(string uri, IBrowserFile file, int blogid, string title, string body, string username)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Post, uri);
-          
-            var content = new MultipartFormDataContent();
-            content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data");
-
-            content.Add(new StringContent(blogid.ToString()), "blogid");
-            content.Add(new StringContent(title), "title");
-            content.Add(new StringContent(body), "body");
-            content.Add(new StringContent(username), "username");
-            
-            var resized = await file.RequestImageFileAsync(file.ContentType, maxWidth: 500, maxHeight: 800);
-            using Stream fileStream = resized.OpenReadStream();
-            content.Add(new StreamContent(fileStream, (int)fileStream.Length), "files", "NewFile.png");
-            
-            request.Content = content;
-            return await sendRequestFormData<T>(request);
-        }
-
         public async Task<T> Post<T>(string uri, object value)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, uri);
             request.Content = new StringContent(JsonSerializer.Serialize(value), Encoding.UTF8, "application/json");
             return await sendRequest<T>(request);
         }
-
-        // helper methods
 
         private async Task<T> sendRequest<T>(HttpRequestMessage request)
         {
@@ -111,6 +89,23 @@ namespace LuvFinder_Blazor_WASM.Services
         }
 
         //for form-data
+        public async Task<string> PostBlog<T>(string uri, byte[]? bytes, int blogid, string title, string body, string username)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, uri);
+
+            var content = new MultipartFormDataContent();
+            content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data");
+
+            content.Add(new StringContent(blogid.ToString()), "blogid");
+            content.Add(new StringContent(title), "title");
+            content.Add(new StringContent(body), "body");
+            content.Add(new StringContent(username), "username");
+            content.Add(new StringContent(bytes == null ? string.Empty : Convert.ToBase64String(bytes)), "bytes");
+
+            request.Content = content;
+            return await sendRequestFormData<T>(request);
+        }
+
         private async Task<string> sendRequestFormData<T>(HttpRequestMessage request)
         {
             // add jwt auth header if user is logged in and request is to the api url
