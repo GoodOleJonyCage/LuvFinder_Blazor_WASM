@@ -1,0 +1,107 @@
+﻿@using System.IO
+@using LuvFinder_Blazor_WASM.Services;
+@using LuvFinder_ViewModels;
+@inject IBlogService BlogService
+@inject IAuthenticationService AuthenticationService
+
+<div class="go-back-container" onclick="@(() => SetSelectedEditBlogID.InvokeAsync(No_Blog_Selected))">
+    <i class='fas fa-arrow-left'></i>
+    <a>Go Back</a>
+</div>
+<div class="post-item blog-item  ">
+    <div class="post-item-inner">
+        <div class="post-content createblog-container ">
+            <div class="title-container">
+                <h3>Title</h3>
+                <input @bind="@Blog.Title" type="text"></input>
+            </div>
+            <div class="image-container">
+                <img src=@Blog.Image alt="blog" />
+                <InputFile accept=".jpg,.jpeg,.pjpeg,.gif,.x-png,.png"
+                    class="form-control" OnChange="@OnInputFileChange" />
+                <button @onclick="()=>ClearImage()" class="lab-btn d-block  btn-sm ">
+                    Revert Image <i class="icofont-paper-plane"></i>
+                </button>
+            </div>
+            <div>
+                <div class="text-center">Body</div>
+                <textarea @bind="@Blog.Body"
+                          name="blog" id="blog" class="textarea" />
+            </div>
+            <div class="highlight-error text-center">@error</div>
+            <div class="text-success fw-bold text-center">@Status</div>
+            <button class="lab-btn" @onclick="() => UpdateBlog()">
+                Publish Blog
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public LuvFinder_ViewModels.Blog Blog { get; set; } = new LuvFinder_ViewModels.Blog();
+
+    [Parameter]
+    public int No_Blog_Selected { get; set; }
+
+    [Parameter]
+    public EventCallback<int> SetSelectedEditBlogID { get; set; }
+
+    public string OriginalImage{ get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        OriginalImage = Blog.Image;
+    }
+
+    public string error { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
+
+    IBrowserFile imgFile;
+
+    private async void UpdateBlog()
+    {
+        Status = string.Empty;
+        error = string.Empty;
+        try
+        {
+            if (imgFile == null)
+            {
+                error = "Please select a file to upload";
+            }
+            else
+            {
+                Status = await BlogService.UpdateBlog(imgFile, Blog.ID, Blog.Title, Blog.Body, Blog.user.UserName);
+            }
+        } 
+        catch (Exception exc)
+        {
+            error = exc.Message;
+        }
+        StateHasChanged();
+    }
+
+    private async Task ClearImage()
+    {
+        imgFile = null;
+        Blog.Image = OriginalImage;
+        StateHasChanged();
+    }
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        if (LuvFinder_Blazor_WASM.Helpers.Utilities.IsImage(e.File.ContentType))
+        {
+            imgFile = e.File;
+            //preview uploaded image
+            using MemoryStream ms = new();
+            var resized = await e.File.RequestImageFileAsync(e.File.ContentType, maxWidth: 500, maxHeight: 800);
+            using Stream fileStream = resized.OpenReadStream();
+            await fileStream.CopyToAsync(ms);
+            Blog.Image = $"data:{e.File.ContentType};base64,{Convert.ToBase64String(ms.ToArray())}";
+
+            StateHasChanged();
+        }
+    }
+    
+}

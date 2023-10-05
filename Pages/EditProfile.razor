@@ -63,8 +63,10 @@
                                 <div class="main-blog">
                                     <div class="row">
                                         <div class="col-lg-8 col-12">
-                                            <CascadingValue Name="UserName" Value="AuthenticationService.User.UserName">
-                                                <BlogView></BlogView>
+                                            <CascadingValue Name="ShowEditButton" Value="AuthenticationService.User != null">
+                                                <CascadingValue Name="UserName" Value="AuthenticationService.User.UserName">
+                                                    <BlogView></BlogView>
+                                                </CascadingValue>
                                             </CascadingValue>
                                         </div>
                                         <div class="col-lg-4 col-12">

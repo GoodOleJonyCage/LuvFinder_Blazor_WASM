@@ -17,6 +17,7 @@
         foreach (var Blog in Blogs)
         {
             <Blog 
+                SetSelectedEditBlogID="@SetSelectedEditBlogID"
                 SetSelectedBlogID="@SetSelectedBlogID"  
                 BlogItem="@Blog" 
                 UserName="@UserName"></Blog>
@@ -38,5 +39,9 @@
 
     [Parameter]
     public EventCallback<int> SetSelectedBlogID { get; set; }
+
+    [Parameter]
+    public EventCallback<int> SetSelectedEditBlogID { get; set; }
+    
  
 }

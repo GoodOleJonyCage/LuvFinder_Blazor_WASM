@@ -1,4 +1,6 @@
 ﻿using LuvFinder_ViewModels;
+using Microsoft.AspNetCore.Components.Forms;
+using System.Xml.Linq;
 
 namespace LuvFinder_Blazor_WASM.Services
 {
@@ -9,6 +11,8 @@ namespace LuvFinder_Blazor_WASM.Services
         Task<int> BlogCount(string username);
         Task<LuvFinder_ViewModels.Blog> GetBlog(string username, int blogid);
         Task<bool> AddBlogComment(string username, int blogid, string comment, int replyto);
+        Task<string> UpdateBlog(IBrowserFile file, int blogid, string title, string body, string username);
+
     }
 
     public class BlogService : IBlogService
@@ -36,6 +40,11 @@ namespace LuvFinder_Blazor_WASM.Services
         public async Task<bool> AddBlogComment(string username, int blogid, string comment, int replyto)
         {
             return await _httpService.Post<bool>("/blog/addblogcomment", new { username,   blogid,   comment,   replyto });
+        }
+
+        public async Task<string> UpdateBlog(IBrowserFile file,int blogid, string title, string body, string username)
+        {
+            return await _httpService.PostBlog<string>("/blog/editblog", file, blogid, title, body, username );
         }
     }
 }

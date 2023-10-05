@@ -19,6 +19,12 @@
                     @onclick="@(() => SetSelectedBlogID.InvokeAsync(BlogItem.ID))"
                     >Read More</a><i class="icofont-double-right"></i>
                 </div>
+                @if (ShowEditButton)
+                {
+                    <div class="read-link">
+                        <i class="fa-solid fa-pencil"></i><a class="left" @onclick="@(() => SetSelectedEditBlogID.InvokeAsync(BlogItem.ID))">Edit</a>
+                    </div>
+                }
                 @* {
                 props.editMode ?
                 <div class="read-link">
@@ -45,10 +51,16 @@
     [Parameter]
     public LuvFinder_ViewModels.Blog BlogItem { get; set; } = new LuvFinder_ViewModels.Blog();
 
+    [CascadingParameter(Name = "ShowEditButton")]
+    public bool ShowEditButton { get; set; }  
+
     [Parameter]
     public string UserName { get; set; } 
 
     [Parameter]
     public EventCallback<int> SetSelectedBlogID { get; set; }
+
+    [Parameter]
+    public EventCallback<int> SetSelectedEditBlogID { get; set; }
 
 }
