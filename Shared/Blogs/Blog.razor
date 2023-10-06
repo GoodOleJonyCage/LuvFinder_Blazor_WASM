@@ -25,15 +25,9 @@
                         <i class="fa-solid fa-pencil"></i><a class="left" @onclick="@(() => SetSelectedEditBlogID.InvokeAsync(BlogItem.ID))">Edit</a>
                     </div>
                 }
-                @* {
-                props.editMode ?
-                <div class="read-link">
-                <i class="fa-solid fa-pencil"></i><NavLink class="left" to="/editprofile/editblog" state={{ blog: props.blog }}>Edit</NavLink>
-                </div>
-                : <></>
-                } *@
+             
             </div>
-            @*  <a class="viewall">Read More <i class="icofont-double-right"></i></a>  *@
+           
             <div class="right">
                 <div class="blog-comment-info">
                     <i class="icofont-comment"></i>

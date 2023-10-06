@@ -23,11 +23,7 @@
                                 Profile
                             </button>
                             <BlogCount UserName="@AuthenticationService.User.UserName"></BlogCount>
-                            <button class="nav-link" id="nav-friends-tab" data-bs-toggle="tab"
-                                    data-bs-target="#friends" type="button" role="tab" aria-controls="friends"
-                                    aria-selected="false">
-                                Friends <span class="item-number">{count}</span>
-                            </button>
+                            <FriendCount UserName="@AuthenticationService.User.UserName"></FriendCount>
                             <button class="nav-link" id="nav-messages-tab" data-bs-toggle="tab"
                                     data-bs-target="#messages" type="button" role="tab" aria-controls="messages"
                                     aria-selected="false">
@@ -39,7 +35,7 @@
                     <div class="tab-content" id="nav-tabContent">
                         @*  Activity tab  *@
                         <div class="tab-pane activity-page fade" id="activity" role="tabpanel">
-                            Activity
+                            <ActivityFriends UserName="@AuthenticationService.User.UserName"></ActivityFriends>
                         </div>
                         @*  Activity tab  *@
                         @* Profile tab  *@

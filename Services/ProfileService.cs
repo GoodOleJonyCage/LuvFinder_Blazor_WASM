@@ -15,6 +15,9 @@ namespace LuvFinder_Blazor_WASM.Services
         Task<bool> SaveProfile(string username, LuvFinder_ViewModels.UserInfo info, List<LuvFinder_ViewModels.ProfileQuestion> vm);
         Task<List<Gender>> GetGenders();
         Task<List<MaritalStatus>> GetMaritalStatuses();
+        Task<List<FriendActivity>> ActivityFriends(string usernameTo);
+        Task<FriendActivity> StartFriendShip(string usernameFrom, string usernameTo);
+        Task<int> GetFriendCount(string username);
     }
 
     public class ProfileService : IProfileService
@@ -62,6 +65,21 @@ namespace LuvFinder_Blazor_WASM.Services
         public async Task<List<MaritalStatus>> GetMaritalStatuses()
         {
             return await _httpService.Get<List<MaritalStatus>>("/profile/maritalstatuses");
+        }
+
+        public async Task<List<FriendActivity>> ActivityFriends(string usernameto)
+        {
+            return await _httpService.Post<List<FriendActivity>>("/profile/activityfriends", new { usernameto });
+        }
+
+        public async Task<FriendActivity>  StartFriendShip(string usernamefrom, string usernameto)
+        {
+            return await _httpService.Post<FriendActivity>("/profile/startfriendship", new { usernamefrom, usernameto });
+        }
+
+        public async Task<int> GetFriendCount(string username)
+        {
+            return await _httpService.Post<int>("/profile/friendcount", new { username });
         }
     }
 }

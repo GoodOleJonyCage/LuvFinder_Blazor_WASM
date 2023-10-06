@@ -1,0 +1,78 @@
+﻿@using LuvFinder_Blazor_WASM.Services;
+@using LuvFinder_ViewModels;
+@inject IProfileService ProfileService
+@inject IAuthenticationService AuthenticationService
+@inject FriendCountService FriendCountService
+
+@if (Activity.FromUserInfo != null)
+{
+    <div class="post-item mb-20">
+        <div class="post-content">
+            <div class="post-author">
+                <div class="post-author-inner">
+                    <div class="author-thumb">
+                        <img src="assets/images/profile/dp.png"
+                             alt="img" />
+                    </div>
+                    <div class="author-details friendship-request-sender">
+
+                        <label>
+                            <a href="/viewprofile/@Activity.FromUserInfo.UserName">@Activity.FromUserInfo.FirstName @Activity.FromUserInfo.LastName (@Activity.FromUserInfo.Age) from @Activity.FromUserInfo.CityName,@Activity.FromUserInfo.RegionName @Activity.FromUserInfo.CountryName</a>
+                        </label>
+                    </div>
+                </div>
+                <div class="friendship-request-sender-time">
+                    <label><i class="icofont-world"></i> Liked you at </label>
+                    <label class="friendship-request-sender-date"><i>@Activity.Date.Value.ToString("dd MMM yyyy hh:mm:ss:tt")</i></label>
+                </div>
+            </div>
+            @if (@Activity.LikeAccepted.HasValue && @Activity.LikeAccepted is true)
+            {
+                <div class="post-description friendship-request-container">
+                    <div>You became friends on </div>
+                    <div>
+                        <label class="small"><i>@Activity.LikeAcceptedDate.Value.ToString("dd MMM yyyy hh:mm:ss:tt")</i></label>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="post-description friendship-request-container">
+                    <div>
+                        Liked your profile.
+                    </div>
+                    <div>
+                        <a @onclick="()=>BecomeFriends(Activity.FromUserInfo.UserName,AuthenticationService.User.UserName)" class="ml-4">Start friendship ! <i class="icofont-like"></i></a>
+                    </div>
+                </div>
+            }
+            <div class="highlight-error">@Error</div>
+        </div>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public FriendActivity Activity { get; set; } = new FriendActivity();
+
+    [Parameter]
+    public string? UserName { get; set; } = string.Empty;
+
+    public string Error { get; set; } = string.Empty;
+
+    private async void BecomeFriends(string from, string to)
+    {
+        try
+        {
+            Activity = await ProfileService.StartFriendShip(from, to);
+            FriendCountService.LoadCount(UserName);
+            StateHasChanged();
+        }
+        catch (Exception e)
+        {
+            Error = e.Message;
+        }
+
+    }
+}

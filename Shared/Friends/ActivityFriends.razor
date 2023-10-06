@@ -1,0 +1,37 @@
+﻿@using LuvFinder_Blazor_WASM.Services;
+@using LuvFinder_ViewModels;
+@inject IProfileService ProfileService
+
+
+ @if(@FriendActivities.Count == 0 && !Loaded )
+ {
+    <div class="highlight-error">Loading</div>
+ }
+ else if(@FriendActivities.Count == 0 && Loaded)
+ {
+    <div class="highlight-error text-center">No Pending Friend Requests</div>
+ }
+ else
+ {
+    @foreach (var Activity in FriendActivities)
+    {
+        <ActivityFriend UserName="@UserName" Activity="@Activity"></ActivityFriend>
+    }
+ }
+
+
+@code {
+
+    [Parameter]
+    public string? UserName { get; set; } = string.Empty;
+
+    public List<FriendActivity> FriendActivities { get; set; } = new List<FriendActivity>();
+
+    public bool Loaded { get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        if (!string.IsNullOrEmpty(UserName))
+            FriendActivities = await ProfileService.ActivityFriends(UserName);
+    }
+}
