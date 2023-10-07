@@ -3,6 +3,7 @@
 @inject IProfileService ProfileService
 @inject IAuthenticationService AuthenticationService
 @inject FriendCountStateContainer FriendCountStateContainer
+@inject FriendProfileStateContainer FriendProfileStateContainer
 
 @if (Activity.FromUserInfo != null)
 {
@@ -67,6 +68,7 @@
         {
             Activity = await ProfileService.StartFriendShip(from, to);
             FriendCountStateContainer.LoadCount(UserName);
+            FriendProfileStateContainer.LoadProfiles(UserName);
             StateHasChanged();
         }
         catch (Exception e)

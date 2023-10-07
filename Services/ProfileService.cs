@@ -18,6 +18,7 @@ namespace LuvFinder_Blazor_WASM.Services
         Task<List<FriendActivity>> ActivityFriends(string usernameTo);
         Task<FriendActivity> StartFriendShip(string usernameFrom, string usernameTo);
         Task<int> GetFriendCount(string username);
+        Task<List<LuvFinder_ViewModels.UserInfo>> GetFriendProfiles(string username);
     }
 
     public class ProfileService : IProfileService
@@ -80,6 +81,11 @@ namespace LuvFinder_Blazor_WASM.Services
         public async Task<int> GetFriendCount(string username)
         {
             return await _httpService.Post<int>("/profile/friendcount", new { username });
+        }
+
+        public async Task<List<UserInfo>> GetFriendProfiles(string username)
+        {
+            return await _httpService.Post<List<LuvFinder_ViewModels.UserInfo>>("/profile/friends", new { username });
         }
     }
 }

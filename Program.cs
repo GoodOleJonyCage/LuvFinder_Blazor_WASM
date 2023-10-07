@@ -18,6 +18,7 @@ builder.Services
                .AddScoped<IHttpService, HttpService>()
                .AddScoped<FriendCountStateContainer, FriendCountStateContainer>()
                .AddScoped<BlogCountStateContainer, BlogCountStateContainer>()
+               .AddScoped<FriendProfileStateContainer, FriendProfileStateContainer>()
                .AddScoped<ILocalStorageService, LocalStorageService>();
  
 // configure http client

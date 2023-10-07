@@ -1,0 +1,35 @@
+﻿@using LuvFinder_Blazor_WASM.Services;
+@inject IProfileService ProfileService
+@inject IAuthenticationService AuthenticationService
+@inject FriendProfileStateContainer FriendProfileStateContainer
+
+<div class="row justify-content-center g-3 g-md-4 ">
+
+    @if (FriendProfileStateContainer.Profiles.Count == 0)
+    {
+        <div class="highlight-error text-center">No Profiles To Load</div>
+    }
+    else
+    {
+        foreach (var profile in FriendProfileStateContainer.Profiles)
+        {
+            <ProfileItem Profile=@profile></ProfileItem>
+        }
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string UserName { get; set; } = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        FriendProfileStateContainer.OnChange += StateHasChanged;
+        FriendProfileStateContainer.LoadProfiles(UserName);
+    }
+
+    public void Dispose()
+    {
+        FriendProfileStateContainer.OnChange -= StateHasChanged;
+    }
+}
