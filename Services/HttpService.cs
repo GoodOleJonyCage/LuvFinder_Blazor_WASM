@@ -26,6 +26,7 @@ namespace LuvFinder_Blazor_WASM.Services
     {
         Task<T> Get<T>(string uri);
         Task<string> PostBlog<T>(string uri, byte[]? bytes,int blogid, string title, string body, string username);
+        Task<string> PostNewBlog<T>(string uri, byte[]? bytes,string title, string body, string username);
         Task<T> Post<T>(string uri, object value);
     }
 
@@ -97,6 +98,22 @@ namespace LuvFinder_Blazor_WASM.Services
             content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data");
 
             content.Add(new StringContent(blogid.ToString()), "blogid");
+            content.Add(new StringContent(title), "title");
+            content.Add(new StringContent(body), "body");
+            content.Add(new StringContent(username), "username");
+            content.Add(new StringContent(bytes == null ? string.Empty : Convert.ToBase64String(bytes)), "bytes");
+
+            request.Content = content;
+            return await sendRequestFormData<T>(request);
+        }
+
+        public async Task<string> PostNewBlog<T>(string uri, byte[]? bytes,  string title, string body, string username)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, uri);
+
+            var content = new MultipartFormDataContent();
+            content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data");
+
             content.Add(new StringContent(title), "title");
             content.Add(new StringContent(body), "body");
             content.Add(new StringContent(username), "username");

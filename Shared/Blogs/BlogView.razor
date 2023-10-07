@@ -7,17 +7,15 @@
 {
     @if (UserName == AuthenticationService.User.UserName)
     {
-        <button class="lab-btn btn-sm" @onclick="()=>ShowNewBlogView(true)">Create new Blog</button>
+        <button class="lab-btn btn-sm " style="margin-bottom:10px;" @onclick="()=>ShowNewBlogView(true)">Create new Blog</button>
     }
-    <BlogList Loaded="@Loaded" Blogs="@Blogs"
+    <BlogList  Loaded="@Loaded" Blogs="@Blogs"
         SetSelectedEditBlogID="@SetSelectedEditBlogID"
     SetSelectedBlogID="@SetSelectedBlogID"></BlogList>
 }
 else if (NewBlogView)
 {
-    <div>New Blog</div>
-     
-    <button class="lab-btn" @onclick="()=>ShowNewBlogView(false)">Cancel</button>
+    <AddBlog ShowNewBlogView="@ShowNewBlogView"></AddBlog>
 }
 else if (SelectedBlogID != NO_BLOG_SELECTED)
 {
@@ -74,13 +72,11 @@ else if (SelectedEditBlogID != NO_BLOG_SELECTED)
             {
                 Blogs = await BlogService.Blogs(UserName);
                 Loaded = true;
-                //StateHasChanged();
             }
         }
         catch (Exception exc)
         {
             Error = exc.Message;
-            //StateHasChanged();
         }
     }
 }

@@ -1,0 +1,116 @@
+﻿@using System.IO
+@using LuvFinder_Blazor_WASM.Services;
+@using LuvFinder_ViewModels;
+@inject IBlogService BlogService
+@inject IAuthenticationService AuthenticationService
+
+<div class="go-back-container" onclick="@(() => ShowNewBlogView.InvokeAsync(false))">
+    <i class='fas fa-arrow-left'></i>
+    <a>Go Back</a>
+</div>
+<div class="post-item blog-item  ">
+    <div class="post-item-inner">
+        @if (!BlogCreated)
+        {
+            <div class="post-content createblog-container ">
+                <div class="title-container">
+                <h3>Title</h3>
+                <input @bind="@Blog.Title" type="text"></input>
+            </div>
+            <div class="image-container">
+                <img src=@(Blog.Image == string.Empty ? "assets/images/userprofileimages/no-image-available.png" : Blog.Image) alt="blog" />
+                <InputFile accept=".jpg,.jpeg,.pjpeg,.gif,.x-png,.png"
+                           class="form-control" OnChange="@OnInputFileChange" />
+            </div>
+            <div>
+                <div class="text-center">Body</div>
+                    <textarea @bind="@Blog.Body" class="textarea" />
+            </div>
+            <div class="highlight-error text-center">@Error</div>
+            <div class="text-success fw-bold text-center">@Status</div>
+            <button class="lab-btn" @onclick="() => AddNewBlog()">
+                Publish Blog
+            </button>
+            </div>
+        }
+        else
+        {
+            <div class="text-center" style="padding:50px 0px;">
+                <button class="lab-btn " @onclick="()=>CreateAnother()">Create Another</button>
+            </div>
+        }
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public EventCallback<bool> ShowNewBlogView { get; set; }
+
+    public LuvFinder_ViewModels.Blog Blog { get; set; } = new LuvFinder_ViewModels.Blog();
+
+    IBrowserFile imgFile;
+
+    public string Error { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
+
+    public bool BlogCreated { get; set; }
+
+    private async void AddNewBlog()
+    {
+        Status = string.Empty;
+        Error = string.Empty;
+        try
+        {
+            if (imgFile == null)
+            {
+                Error = "Image required";
+            }
+            else if (!LuvFinder_Blazor_WASM.Helpers.Utilities.IsImage(imgFile.ContentType))
+            {
+                Error = "Please upload an image file";
+            }
+            else if (LuvFinder_Blazor_WASM.Helpers.Utilities.IsImage(imgFile.ContentType))
+            {
+                using MemoryStream ms = new();
+                var resized = await imgFile.RequestImageFileAsync(imgFile.ContentType, maxWidth: 500, maxHeight: 800);
+                using Stream fileStream = resized.OpenReadStream();
+                await fileStream.CopyToAsync(ms);
+
+                Status = await BlogService.AddBlog(ms.ToArray(), Blog.Title, Blog.Body, AuthenticationService.User.UserName);
+
+                BlogCreated = true;
+            }
+        }
+        catch (Exception exc)
+        {
+            Error = exc.Message;
+        }
+    }
+
+    private void CreateAnother()
+    {
+        BlogCreated = false;
+        imgFile = null;
+        Error = string.Empty;
+        Status = string.Empty;
+        Blog = new LuvFinder_ViewModels.Blog();
+    }
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        imgFile = e.File;
+        if (LuvFinder_Blazor_WASM.Helpers.Utilities.IsImage(e.File.ContentType))
+        {
+            //preview uploaded image
+            using MemoryStream ms = new();
+            var resized = await e.File.RequestImageFileAsync(e.File.ContentType, maxWidth: 500, maxHeight: 800);
+            using Stream fileStream = resized.OpenReadStream();
+            await fileStream.CopyToAsync(ms);
+            Blog.Image = $"data:{e.File.ContentType};base64,{Convert.ToBase64String(ms.ToArray())}";
+
+            StateHasChanged();
+        }
+    }
+}
