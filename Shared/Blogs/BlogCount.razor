@@ -1,11 +1,11 @@
 ﻿@using LuvFinder_Blazor_WASM.Services;
 @using LuvFinder_ViewModels;
-@inject IBlogService BlogService
+@inject BlogCountStateContainer BlogCountStateContainer
 
 <button class="nav-link" id="nav-blogs-tab" data-bs-toggle="tab"
         data-bs-target="#blogs" type="button" role="tab" aria-controls="blogs"
         aria-selected="false">
-    Blogs <span class="item-number">@Count</span>
+    Blogs <span class="item-number">@BlogCountStateContainer.Count</span>
 </button>
 <div class="highlight-error">@Error</div>
 
@@ -21,10 +21,7 @@
         try
         {
             if (!string.IsNullOrEmpty(UserName))
-            {
-                Count = await BlogService.BlogCount(UserName);
-                StateHasChanged();
-            }
+                BlogCountStateContainer.LoadCount(UserName);
         }
         catch (Exception exc)
         {
@@ -32,5 +29,14 @@
             Error = exc.Message;
             StateHasChanged();
         }
+    }
+    protected override void OnInitialized()
+    {
+        BlogCountStateContainer.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        BlogCountStateContainer.OnChange -= StateHasChanged;
     }
 }

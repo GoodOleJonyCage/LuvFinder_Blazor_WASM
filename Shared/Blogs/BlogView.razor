@@ -15,7 +15,7 @@
 }
 else if (NewBlogView)
 {
-    <AddBlog ShowNewBlogView="@ShowNewBlogView"></AddBlog>
+    <AddBlog LoadBlogs="@LoadBlogs" ShowNewBlogView="@ShowNewBlogView"></AddBlog>
 }
 else if (SelectedBlogID != NO_BLOG_SELECTED)
 {
@@ -64,7 +64,7 @@ else if (SelectedEditBlogID != NO_BLOG_SELECTED)
         NewBlogView = show;
     }
 
-    protected async override Task OnParametersSetAsync()
+    private async void LoadBlogs()
     {
         try
         {
@@ -72,11 +72,17 @@ else if (SelectedEditBlogID != NO_BLOG_SELECTED)
             {
                 Blogs = await BlogService.Blogs(UserName);
                 Loaded = true;
+                StateHasChanged();
             }
         }
         catch (Exception exc)
         {
             Error = exc.Message;
         }
+    }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        LoadBlogs();
     }
 }

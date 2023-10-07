@@ -3,6 +3,7 @@
 @using LuvFinder_ViewModels;
 @inject IBlogService BlogService
 @inject IAuthenticationService AuthenticationService
+@inject BlogCountStateContainer BlogCountStateContainer
 
 <div class="go-back-container" onclick="@(() => ShowNewBlogView.InvokeAsync(false))">
     <i class='fas fa-arrow-left'></i>
@@ -48,6 +49,10 @@
     [Parameter]
     public EventCallback<bool> ShowNewBlogView { get; set; }
 
+    [Parameter]
+    public EventCallback LoadBlogs { get; set; }
+
+
     public LuvFinder_ViewModels.Blog Blog { get; set; } = new LuvFinder_ViewModels.Blog();
 
     IBrowserFile imgFile;
@@ -81,6 +86,9 @@
                 Status = await BlogService.AddBlog(ms.ToArray(), Blog.Title, Blog.Body, AuthenticationService.User.UserName);
 
                 BlogCreated = true;
+                
+                BlogCountStateContainer.LoadCount(AuthenticationService.User.UserName);
+                await LoadBlogs.InvokeAsync();
             }
         }
         catch (Exception exc)

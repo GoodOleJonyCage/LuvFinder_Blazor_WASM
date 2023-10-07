@@ -1,12 +1,12 @@
 ﻿@using LuvFinder_Blazor_WASM.Services;
 @using LuvFinder_ViewModels;
 @inject IProfileService ProfileService
-@inject FriendCountStateContainer FriendCountService
+@inject FriendCountStateContainer FriendCountStateContainer
 
 <button class="nav-link" id="nav-friends-tab" data-bs-toggle="tab"
         data-bs-target="#friends" type="button" role="tab" aria-controls="friends"
         aria-selected="false">
-    Friends <span class="item-number">@FriendCountService.Count</span>
+    Friends <span class="item-number">@FriendCountStateContainer.Count</span>
 </button>
 
 @code {
@@ -17,16 +17,16 @@
     protected async override Task OnParametersSetAsync()
     {
         if (!string.IsNullOrEmpty(UserName))
-            FriendCountService.LoadCount(UserName);
+            FriendCountStateContainer.LoadCount(UserName);
     }
 
     protected override void OnInitialized()
     {
-        FriendCountService.OnChange += StateHasChanged;
+        FriendCountStateContainer.OnChange += StateHasChanged;
     }
 
     public void Dispose()
     {
-        FriendCountService.OnChange -= StateHasChanged;
+        FriendCountStateContainer.OnChange -= StateHasChanged;
     }
 }

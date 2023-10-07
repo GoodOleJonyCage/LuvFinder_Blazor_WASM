@@ -16,7 +16,8 @@ builder.Services
                .AddScoped<IChatService, ChatService>()
                .AddScoped<IBlogService, BlogService>()
                .AddScoped<IHttpService, HttpService>()
-               .AddScoped<FriendCountStateContainer, FriendCountStateContainer>() 
+               .AddScoped<FriendCountStateContainer, FriendCountStateContainer>()
+               .AddScoped<BlogCountStateContainer, BlogCountStateContainer>()
                .AddScoped<ILocalStorageService, LocalStorageService>();
  
 // configure http client

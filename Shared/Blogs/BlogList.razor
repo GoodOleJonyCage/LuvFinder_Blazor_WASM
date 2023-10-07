@@ -1,8 +1,7 @@
 ﻿@using LuvFinder_Blazor_WASM.Services;
 @using LuvFinder_ViewModels;
 @inject IAuthenticationService AuthenticationService
-@inject IBlogService BlogService
-
+ 
 <div class="blog-wrapper ">
     @if (!Loaded)
     {
@@ -43,5 +42,5 @@
     [Parameter]
     public EventCallback<int> SetSelectedEditBlogID { get; set; }
     
- 
+  
 }
