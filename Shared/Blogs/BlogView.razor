@@ -1,12 +1,23 @@
 ﻿@using LuvFinder_Blazor_WASM.Services;
 @using LuvFinder_ViewModels;
 @inject IBlogService BlogService
+@inject IAuthenticationService AuthenticationService
 
-@if (SelectedBlogID == NO_BLOG_SELECTED && SelectedEditBlogID == NO_BLOG_SELECTED)
+@if (SelectedBlogID == NO_BLOG_SELECTED && SelectedEditBlogID == NO_BLOG_SELECTED && !NewBlogView)
 {
+    @if (UserName == AuthenticationService.User.UserName)
+    {
+        <button class="lab-btn btn-sm" @onclick="()=>ShowNewBlogView(true)">Create new Blog</button>
+    }
     <BlogList Loaded="@Loaded" Blogs="@Blogs"
         SetSelectedEditBlogID="@SetSelectedEditBlogID"
-        SetSelectedBlogID="@SetSelectedBlogID"></BlogList>
+    SetSelectedBlogID="@SetSelectedBlogID"></BlogList>
+}
+else if (NewBlogView)
+{
+    <div>New Blog</div>
+     
+    <button class="lab-btn" @onclick="()=>ShowNewBlogView(false)">Cancel</button>
 }
 else if (SelectedBlogID != NO_BLOG_SELECTED)
 {
@@ -36,7 +47,7 @@ else if (SelectedEditBlogID != NO_BLOG_SELECTED)
     public string Error { get; set; } = string.Empty;
 
     private const int NO_BLOG_SELECTED = -1;
-    
+
     public int SelectedBlogID { get; set; } = NO_BLOG_SELECTED;
     public void SetSelectedBlogID(int blogID)
     {
@@ -47,6 +58,12 @@ else if (SelectedEditBlogID != NO_BLOG_SELECTED)
     public void SetSelectedEditBlogID(int blogID)
     {
         SelectedEditBlogID = blogID;
+    }
+
+    private bool  NewBlogView{ get; set; }
+    private void ShowNewBlogView(bool show)
+    {
+        NewBlogView = show;
     }
 
     protected async override Task OnParametersSetAsync()

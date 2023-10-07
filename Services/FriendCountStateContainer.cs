@@ -10,10 +10,10 @@ namespace LuvFinder_Blazor_WASM.Services
     //FriendCountService.OnChange += StateHasChanged;
     //StateContainer, above allows any component to subscribe to onchange event for this class, so when
     //its value changes, the target components updates/rerenders
-    public class FriendCountService
+    public class FriendCountStateContainer
     {
         private readonly IProfileService _ProfileService;
-        public FriendCountService(IProfileService ProfileService)
+        public FriendCountStateContainer(IProfileService ProfileService)
         {
             _ProfileService = ProfileService;
         }
