@@ -1,0 +1,43 @@
+﻿@using LuvFinder_Blazor_WASM.Services;
+@using LuvFinder_ViewModels;
+@inject ChatCountStateContainer ChatCountStateContainer
+ 
+
+<button class="nav-link" id="nav-messages-tab" data-bs-toggle="tab"
+        data-bs-target="#messages" type="button" role="tab" aria-controls="messages"
+        aria-selected="false">
+    Messages <span class="item-number">@ChatCountStateContainer.Count</span>
+</button>
+<div class="highlight-error">@Error</div>
+
+@code {
+
+    [Parameter]
+    public string UserName { get; set; }
+    public string Error { get; set; }
+    public int Count { get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        try
+        {
+            if (!string.IsNullOrEmpty(UserName))
+                ChatCountStateContainer.LoadCount(UserName);
+        }
+        catch (Exception exc)
+        {
+
+            Error = exc.Message;
+            StateHasChanged();
+        }
+    }
+    protected override void OnInitialized()
+    {
+        ChatCountStateContainer.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        ChatCountStateContainer.OnChange -= StateHasChanged;
+    }
+}

@@ -1,0 +1,36 @@
+﻿@using LuvFinder_Blazor_WASM.Services;
+@inject IChatService ChatService
+@inject IAuthenticationService AuthenticationService
+
+
+<div>
+    @if (SummaryList.Count == 0 && !NoSummary)
+    {
+        <div class="highlight-error">Loading</div>
+    }
+    else if (NoSummary)
+    {
+        <div class="highlight-error text-center">No Messages</div>
+    }
+    else
+    {
+        foreach (var Summary in SummaryList)
+        {
+            <ChatItem SetChatWith="@SetChatWith" Summary="@Summary"></ChatItem>
+        }
+    }
+</div>
+
+@code {
+
+    [Parameter]
+    public EventCallback<string> SetChatWith { get; set; }
+    
+    private List<LuvFinder_ViewModels.ChatSummary> SummaryList { get; set; } = new List<LuvFinder_ViewModels.ChatSummary>();
+    private bool NoSummary { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        SummaryList = await ChatService.ChatSummary(AuthenticationService.User.UserName);
+    }
+}

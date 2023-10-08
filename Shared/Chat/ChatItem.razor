@@ -1,0 +1,23 @@
+﻿
+
+<div class="chat-summary-item">
+    <div>
+        You and
+        <label class=" chat-summary-item-name"> <a class="pointer" href="/viewprofile/@Summary.UserInfoB.UserName"> @Summary.UserInfoB.FirstName @Summary.UserInfoB.LastName</a> (@Summary.UserInfoB.Age)</label>
+        have <label class="chat-summary-item-count">@Summary.Count</label> chat messages
+    </div>
+    <div class="chat-summary-item-button">
+        <a @onclick="()=>SetChatWith.InvokeAsync(Summary.UserInfoB.UserName)">View Messages</a>
+       @*  <NavLink href="/editprofile/chatmessages"
+        >View Messages</NavLink> *@
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public LuvFinder_ViewModels.ChatSummary Summary { get; set; } = new LuvFinder_ViewModels.ChatSummary();
+
+    [Parameter]
+    public EventCallback<string> SetChatWith { get; set; }
+}

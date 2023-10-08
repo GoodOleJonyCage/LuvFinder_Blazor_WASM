@@ -724,3 +724,7 @@ ul li.nocheckmark:before {
         color: black;
         width: 100px;
     }
+
+    .pointer{
+        cursor:pointer;
+    }

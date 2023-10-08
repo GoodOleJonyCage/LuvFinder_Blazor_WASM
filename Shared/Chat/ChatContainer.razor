@@ -1,0 +1,19 @@
+﻿@if (string.IsNullOrEmpty(ChatWith))
+{
+    <ChatSummary SetChatWith="@SetChatWith"></ChatSummary>
+}
+else
+{
+    <div>Chat Started with @ChatWith</div>
+    <div class="go-back-container" @onclick="() => SetChatWith(string.Empty)">
+        <i class='fas fa-arrow-left'></i>
+        <a>Go Back</a>
+    </div>
+}
+@code {
+    private string ChatWith { get; set; } = string.Empty;
+    public void SetChatWith(string username)
+    {
+        ChatWith = username;
+    }
+}
