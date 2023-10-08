@@ -11,6 +11,7 @@ namespace LuvFinder_Blazor_WASM.Services
         Task<bool> AreFriends(string usernamefrom, string usernameto);
         Task<List<LuvFinder_ViewModels.ChatSummary>> ChatSummary(string username);
         Task<int> GetChatMessagesCount(string username);
+        Task<List<LuvFinder_ViewModels.Message>> GetChat(string usernamefrom, string usernameto);
     }
 
     public class ChatService : IChatService
@@ -44,6 +45,11 @@ namespace LuvFinder_Blazor_WASM.Services
         public async Task<int> GetChatMessagesCount(string username)
         {
             return await _httpService.Post<int>("/chat/chatcount", new { username });
+        }
+
+        public async Task<List<Message>> GetChat(string usernamefrom, string usernameto)
+        {
+            return await _httpService.Post<List<Message>>("/chat/chat", new { usernamefrom,  usernameto });
         }
     }
 }

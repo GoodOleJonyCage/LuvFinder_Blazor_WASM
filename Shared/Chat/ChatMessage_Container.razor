@@ -1,0 +1,36 @@
+﻿@using LuvFinder_Blazor_WASM.Services;
+@using LuvFinder_ViewModels;
+@inject IProfileService ProfileService
+@inject IAuthenticationService AuthenticationService
+
+@if(Loaded)
+{
+    <ChatMessage_Header ChatWith="@chatuserB"></ChatMessage_Header>
+    <ChatMessages_Chat chatuserA="@chatuserA" chatuserB="@chatuserB" ></ChatMessages_Chat>
+}
+
+@code {
+
+
+    [Parameter]
+    public string ChatWithUser { get; set; } = string.Empty;
+
+    public UserInfo chatuserA { get; set; } = new UserInfo();
+    public UserInfo chatuserB { get; set; } = new UserInfo();
+
+    public bool Loaded { get; set; }
+
+    private async void LoadData()
+    {
+        chatuserA = await ProfileService.UserInfo(AuthenticationService.User.UserName);
+        chatuserB = await ProfileService.UserInfo(ChatWithUser);
+        Loaded = true;
+        StateHasChanged();
+    }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        LoadData();
+    }
+     
+}

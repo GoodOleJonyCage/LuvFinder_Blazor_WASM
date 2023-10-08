@@ -405,14 +405,35 @@ ul li.nocheckmark:before {
     font-size: smaller;
 }
 
-.comment-list .comment {
+.comment-list .comment-left {
     display: flex;
+    /*flex-direction: column;*/
     justify-content: flex-start;
+    gap:10px;
 }
 
 .comment-list .comment-right {
     display: flex;
+    /* flex-direction: column;*/
     justify-content: flex-end;
+    gap: 10px;
+}
+.comment-left .com-image,
+.comment-right .com-image {
+    min-height: 80px;
+    min-width: 80px;
+    border-radius: 50%;
+    float: left;
+}
+
+.comment-left .com-image img,
+.comment-right .com-image img {
+    border-radius: 50%;
+}
+
+.comment-list .message-date{
+    font-style:italic;
+    font-size:small;
 }
 
 .comments .chat-container {
@@ -634,6 +655,7 @@ ul li.nocheckmark:before {
 
 .comment {
     display: flex;
+    justify-content:flex-start;
     flex-direction: column;
 }
 

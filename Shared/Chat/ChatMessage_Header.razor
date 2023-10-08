@@ -1,0 +1,12 @@
+﻿@using LuvFinder_ViewModels;
+
+<div class="chat-header-user">
+    <label>Chat with </label>
+    <label class="chat-summary-user"> @ChatWith.FirstName @ChatWith.LastName (@ChatWith.Age) [@ChatWith.Gender]</label>
+    <label>from </label><label class="chat-summary-location">@ChatWith.CityName,@ChatWith.RegionName @ChatWith.CountryName</label>
+</div>
+
+@code {
+    [Parameter]
+    public UserInfo ChatWith { get; set; } = new UserInfo();
+}

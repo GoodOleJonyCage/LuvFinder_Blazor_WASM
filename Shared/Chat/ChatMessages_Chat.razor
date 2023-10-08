@@ -1,0 +1,127 @@
+﻿@using LuvFinder_Blazor_WASM.Services;
+@using LuvFinder_ViewModels;
+@implements IDisposable
+@inject IChatService ChatService
+@inject ChatCountStateContainer ChatCountStateContainer
+@using System.Timers
+
+@if (Chat.Count == 0)
+{
+    <div class="highlight-error">Loading</div>
+}
+else
+
+{
+    <div  class="comments">
+        <div class="widget-title chat-header">
+            <h3>@Chat.Count Messages</h3>
+            @*  <div class="go-back-container">
+        <i class='fas fa-arrow-left'></i><NavLink to="/editprofile">Go Back</NavLink>
+        </div> *@
+        </div>
+        <div>
+            <div class="comment-list chat-container" id="chat-div">
+                @foreach (var Message in Chat)
+                {
+                    <div class=@(Message.DisplayOnLeft.Value ? "comment-left " : "comment-right") >
+                        <div class="com-image">
+                            <img alt="" src=@(Message.DisplayOnLeft.Value ? chatuserA.ProfilePic : chatuserB.ProfilePic)
+                                 class="avatar avatar-90 photo" height="90" width="90" />
+                        </div>
+                        <div class="com-content">
+                            <div class="com-title">
+                                <div class="com-title-meta">
+                                    <h4>
+                                        <a href="/#" rel="external nofollow" class="url">
+                                            @(
+                                                Message.DisplayOnLeft.Value ? chatuserA.FirstName + " " + chatuserA.LastName :
+                                                chatuserB.FirstName + " " + chatuserB.LastName
+                                                )
+                                        </a>
+                                    </h4>
+                                    <span class="message-date">@Message.Date.Value.ToString("dd MMM yyyy hh:mm:ss:tt")</span>
+                                </div>
+                            </div>
+                            <p>@Message.Text</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="comment-respond">
+        <div class="add-comment">
+            <div class="comment-form">
+                <textarea @bind="@Comment" class="comment-input" cols="45" rows="5" placeholder="Type Here Message" />
+                <div class="hightlight-error">@Error</div>
+                <button @onclick="()=>AddMessage()" class="lab-btn" ><span>Send Message</span></button>
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+
+    [Parameter]
+    public UserInfo chatuserA { get; set; } = new UserInfo();
+
+    [Parameter]
+    public UserInfo chatuserB { get; set; } = new UserInfo();
+
+    public List<Message> Chat { get; set; } = new List<Message>();
+
+    public string Comment { get; set; } = string.Empty;
+
+    public string Error { get; set; } = string.Empty;
+
+    Timer timer = new Timer();
+
+    private async void AddMessage()
+    {
+        Error = string.Empty;
+        try
+        {
+            if (!string.IsNullOrEmpty(Comment))
+            {
+                var added = await ChatService.AddChatMessage(chatuserA.UserName, chatuserB.UserName, Comment);
+                if (added)
+                {
+                    Comment = string.Empty;
+                    ChatCountStateContainer.LoadCount(chatuserA.UserName);
+                    LoadChat();
+                }
+            }
+            else
+            {
+                Error = "Comment Required";
+            }
+        }
+        catch (Exception exc)
+        {
+            Error = exc.Message;
+        }
+    }
+
+    private async void LoadChat()
+    {
+        Chat = await ChatService.GetChat(chatuserA.UserName, chatuserB.UserName);
+        StateHasChanged();
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        LoadChat();
+
+        //reload chat after 5 secs
+        timer.Interval = 5000;
+        timer.Elapsed += async (_, _) => LoadChat();
+        timer.Start();
+    }
+  
+    public void Dispose()
+    {
+        timer.Dispose();
+    }
+    
+}

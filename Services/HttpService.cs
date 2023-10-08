@@ -66,7 +66,7 @@ namespace LuvFinder_Blazor_WASM.Services
         private async Task<T> sendRequest<T>(HttpRequestMessage request)
         {
             // add jwt auth header if user is logged in and request is to the api url
-            var user = await _localStorageService.GetItem<LuvFinder_ViewModels.User>("user");
+            //var user = await _localStorageService.GetItem<LuvFinder_ViewModels.User>("user");
             //var isApiUrl = !request.RequestUri.IsAbsoluteUri;
             //if (user != null && isApiUrl)
             //    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", user.Token);
