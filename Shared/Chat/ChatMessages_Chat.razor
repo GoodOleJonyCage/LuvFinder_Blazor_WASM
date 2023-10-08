@@ -65,9 +65,11 @@ else
 
     [Inject]
     public IJSRuntime JSRuntime { get; set; }
+    private IJSObjectReference _jsModule;
     public async Task ScrollToLastChatMessage()
     {
-        await JSRuntime.InvokeVoidAsync("scrollToBottom", "chat-div");
+        //await JSRuntime.InvokeVoidAsync("scrollToBottom", "chat-div");
+        await _jsModule.InvokeVoidAsync("scrollToBottom", "chat-div");
     }
 
     [Parameter]
@@ -119,6 +121,8 @@ else
 
     protected async override Task OnInitializedAsync()
     {
+        _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./scripts/script.js");
+        
         LoadChat();
 
         //reload chat after 5 secs
