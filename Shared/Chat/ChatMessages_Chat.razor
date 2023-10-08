@@ -4,6 +4,7 @@
 @inject IChatService ChatService
 @inject ChatCountStateContainer ChatCountStateContainer
 @using System.Timers
+@using Microsoft.JSInterop;
 
 @if (Chat.Count == 0)
 {
@@ -15,9 +16,7 @@ else
     <div  class="comments">
         <div class="widget-title chat-header">
             <h3>@Chat.Count Messages</h3>
-            @*  <div class="go-back-container">
-        <i class='fas fa-arrow-left'></i><NavLink to="/editprofile">Go Back</NavLink>
-        </div> *@
+            
         </div>
         <div>
             <div class="comment-list chat-container" id="chat-div">
@@ -54,7 +53,7 @@ else
             <div class="comment-form">
                 <textarea @bind="@Comment" class="comment-input" cols="45" rows="5" placeholder="Type Here Message" />
                 <div class="hightlight-error">@Error</div>
-                <button @onclick="()=>AddMessage()" class="lab-btn" ><span>Send Message</span></button>
+                <button @onclick="AddMessage" class="lab-btn" ><span>Send Message</span></button>
             </div>
         </div>
     </div>
@@ -62,6 +61,14 @@ else
 
 
 @code {
+
+
+    [Inject]
+    public IJSRuntime JSRuntime { get; set; }
+    public async Task ScrollToLastChatMessage()
+    {
+        await JSRuntime.InvokeVoidAsync("scrollToBottom", "chat-div");
+    }
 
     [Parameter]
     public UserInfo chatuserA { get; set; } = new UserInfo();
@@ -107,6 +114,7 @@ else
     {
         Chat = await ChatService.GetChat(chatuserA.UserName, chatuserB.UserName);
         StateHasChanged();
+        await ScrollToLastChatMessage();
     }
 
     protected async override Task OnInitializedAsync()
