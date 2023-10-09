@@ -2,46 +2,7 @@
 @inject IAuthenticationService AuthenticationService
 @inherits LayoutComponentBase
 
-@* <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
 
-    <main>
-        <div class="top-row px-4">
-            @userName
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
-
-@code{
-    string userName = string.Empty;
-
-    protected override async void OnInitialized()
-    {
-        if (AuthenticationService.User != null)
-        {
-            userName = AuthenticationService.User.FirstName + " " + AuthenticationService.User.LastName;
-        }
-    }
-    protected override async  Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (AuthenticationService.User != null)
-        {
-            userName = AuthenticationService.User.FirstName + " " + AuthenticationService.User.LastName;
-        }
-        else
-        {
-            userName = string.Empty;
-        }
-    }
-    
-} *@
 
 @* Header *@
 <header class="header-section">

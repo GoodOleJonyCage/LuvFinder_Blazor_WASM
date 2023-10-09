@@ -1,0 +1,136 @@
+﻿@using LuvFinder_Blazor_WASM.Services;
+@using LuvFinder_ViewModels;
+@inject NavigationManager NavigationManager
+@inject ISearchStateContainer SearchStateContainer
+@inject ISearchService SearchService
+
+@if (Loaded)
+{
+    <section class="banner-section">
+        <div class="container">
+            <div class="section-wrapper">
+                <div class="row align-items-end">
+                    <div class="col-lg-6">
+                        <div class="banner-content">
+                            <div class="intro-form">
+                                <div class="intro-form-inner">
+                                    <h3>Introducing TuruLav</h3>
+                                    <p>
+                                        Serious Dating With <strong>TuruLav </strong> Your Perfect
+                                        Match is Just a Click Away.
+                                    </p>
+                                    <form action="/" class="banner-form">
+                                        <div class="gender">
+                                            <label htmlFor="gender" class="left">I am a </label>
+                                            <div class="custom-select right">
+                                                <select @bind="@SearchStateContainer.SearchCriteria.SelectedSeekingGender">
+                                                    <option value="0">I am a</option>
+                                                    @foreach (var Gender in InitializedSearchCriteria.Genders)
+                                                    {
+                                                        <option value="@Gender.Id">@Gender.Name</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="person">
+                                            <label htmlFor="gender-two" class="left">Looking for</label>
+                                            <div class="custom-select right">
+                                                <select @bind="@SearchStateContainer.SearchCriteria.SelectedGender">
+                                                    <option value="0">Looking for a</option>
+                                                    @foreach (var Gender in InitializedSearchCriteria.Genders)
+                                                    {
+                                                        <option value="@Gender.Id">@Gender.Name</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="age">
+                                            <label htmlFor="age" class="left">Age</label>
+                                            <div class="right d-flex justify-content-between">
+                                                <div class="custom-select">
+                                                    <select @bind="@SearchStateContainer.SearchCriteria.SelectedMinAge">
+                                                        <option value="0">Min Age</option>
+                                                        @foreach (var Age in @InitializedSearchCriteria.MinAge)
+                                                        {
+                                                            <option value="@Age">@Age</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="custom-select">
+                                                    <select @bind="@SearchStateContainer.SearchCriteria.SelectedMaxAge">
+                                                        <option value="0">Max Age</option>
+                                                        @foreach (var Age in @InitializedSearchCriteria.MaxAge)
+                                                        {
+                                                            <option value="@Age">@Age</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="city">
+                                            <label htmlFor="city" class="left">City</label>
+                                            <input class="right" type="text" id="city" placeholder="Your City Name.." />
+                                        </div>
+                                        <button @onclick="()=> NavigateToSearch()" class="">Find Your Partner</button>
+                                    </form>
+                                    <ul class="social-list">
+                                        <li class="google">
+                                            <a href="/#">
+                                                <img src="assets/images/banner/google.png" alt="img" />
+                                                <span>Continue with google</span>
+                                            </a>
+                                        </li>
+                                        <li class="facebook">
+                                            <a href="/#">
+
+                                                <i class="icofont-facebook"></i>
+                                            </a>
+                                        </li>
+                                        <li class="twitter">
+                                            <a href="/#">
+                                                <i class="icofont-twitter"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="banner-thumb">
+                            <img src="assets/images/banner/01.png" alt="img" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="all-shapes">
+            <img src="assets/images/banner/banner-shapes/01.png" alt="shape" class="banner-shape shape-1" />
+            <img src="assets/images/banner/banner-shapes/02.png" alt="shape" class="banner-shape shape-2" />
+            <img src="assets/images/banner/banner-shapes/03.png" alt="shape" class="banner-shape shape-3" />
+            <img src="assets/images/banner/banner-shapes/04.png" alt="shape" class="banner-shape shape-4" />
+            <img src="assets/images/banner/banner-shapes/05.png" alt="shape" class="banner-shape shape-5" />
+            <img src="assets/images/banner/banner-shapes/06.png" alt="shape" class="banner-shape shape-6" />
+            <img src="assets/images/banner/banner-shapes/07.png" alt="shape" class="banner-shape shape-7" />
+            <img src="assets/images/banner/banner-shapes/08.png" alt="shape" class="banner-shape shape-8" />
+        </div>
+    </section>
+}
+
+@code {
+
+    private SearchCriteria InitializedSearchCriteria { get; set; } = new SearchCriteria();
+    private bool Loaded { get; set; }
+
+    protected async override void OnInitialized()
+    {
+        InitializedSearchCriteria = await SearchService.InitializeSearchCriteria();
+        Loaded = true;
+        StateHasChanged();
+    }
+
+    private void NavigateToSearch()
+    {
+        NavigationManager.NavigateTo("/search");
+    }
+}

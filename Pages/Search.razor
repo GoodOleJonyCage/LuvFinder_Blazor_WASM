@@ -4,114 +4,115 @@
 @inject ISearchStateContainer SearchStateContainer
 @inject ISearchService SearchService
 
+<PageHeader></PageHeader>
 @if (Loaded)
 {
-        <section style="padding-top:15%" class="member-page-section">
-                    <div class="container">
-                        <div class="member-filter">
-                            <div class="member-filter-inner">
-                                <div action="/" class="filter-form">
-                                    <div class="filter-form-fields">
-                                        <div class="gender">
-                                            <div class="custom-select right w-100">
-                                                <select @bind="@SearchStateContainer.SearchCriteria.SelectedSeekingGender">
-                                                    <option value="0">I am a</option>
-                                                    @foreach (var Gender in InitializedSearchCriteria.Genders)
-                                                    {
-                                                        <option value="@Gender.Id">@Gender.Name</option>
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="person">
-                                            <div class="custom-select right w-100">
-                                                <select @bind="@SearchStateContainer.SearchCriteria.SelectedGender">
-                                                    <option value="0">Looking for a</option>
-                                                    @foreach (var Gender in InitializedSearchCriteria.Genders)
-                                                    {
-                                                        <option value="@Gender.Id">@Gender.Name</option>
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>
-                                            <div class="age">
-                                                <div class="custom-select right w-100">
-                                                    <select @bind="@SearchStateContainer.SearchCriteria.SelectedMaritalStatus">
-                                                        <option value="0">Seeking Marital Status</option>
-                                                        @foreach (var Status in InitializedSearchCriteria.MaritalStatuses)
-                                                        {
-                                                            <option value="@Status.Id">@Status.Name</option>
-                                                        }
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        <div class="age">
-                                            <div class="right d-flex justify-content-between w-100">
-                                                <div class="custom-select">
-                                                    <select @bind="@SearchStateContainer.SearchCriteria.SelectedMinAge">
-                                                        <option value="0">Min Age</option>
-                                                        @foreach (var Age in @InitializedSearchCriteria.MinAge)
-                                                        {
-                                                            <option value="@Age">@Age</option>
-                                                        }
-                                                    </select>
-                                                </div>
-                                                <div class="custom-select">
-                                                    <select @bind="@SearchStateContainer.SearchCriteria.SelectedMaxAge">
-                                                        <option value="0">Max Age</option>
-                                                        @foreach (var Age in @InitializedSearchCriteria.MaxAge)
-                                                        {
-                                                            <option value="@Age">@Age</option>
-                                                        }
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
+    <section class="member-page-section">
+        <div class="container">
+            <div class="member-filter">
+                <div class="member-filter-inner">
+                    <div action="/" class="filter-form">
+                        <div class="filter-form-fields">
+                            <div class="gender">
+                                <div class="custom-select right w-100">
+                                    <select @bind="@SearchStateContainer.SearchCriteria.SelectedSeekingGender">
+                                        <option value="0">I am a</option>
+                                        @foreach (var Gender in InitializedSearchCriteria.Genders)
+                                        {
+                                            <option value="@Gender.Id">@Gender.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="person">
+                                <div class="custom-select right w-100">
+                                    <select @bind="@SearchStateContainer.SearchCriteria.SelectedGender">
+                                        <option value="0">Looking for a</option>
+                                        @foreach (var Gender in InitializedSearchCriteria.Genders)
+                                        {
+                                            <option value="@Gender.Id">@Gender.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="age">
+                                <div class="custom-select right w-100">
+                                    <select @bind="@SearchStateContainer.SearchCriteria.SelectedMaritalStatus">
+                                        <option value="0">Seeking Marital Status</option>
+                                        @foreach (var Status in InitializedSearchCriteria.MaritalStatuses)
+                                        {
+                                            <option value="@Status.Id">@Status.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="age">
+                                <div class="right d-flex justify-content-between w-100">
+                                    <div class="custom-select">
+                                        <select @bind="@SearchStateContainer.SearchCriteria.SelectedMinAge">
+                                            <option value="0">Min Age</option>
+                                            @foreach (var Age in @InitializedSearchCriteria.MinAge)
+                                            {
+                                                <option value="@Age">@Age</option>
+                                            }
+                                        </select>
                                     </div>
-                                    <div class="">
-                                        <div class="search-location-selectors-search">
-                                            @* <LocationLocator info={searchcriteria}></LocationLocator> *@
-                                            Location
-                                        </div>
+                                    <div class="custom-select">
+                                        <select @bind="@SearchStateContainer.SearchCriteria.SelectedMaxAge">
+                                            <option value="0">Max Age</option>
+                                            @foreach (var Age in @InitializedSearchCriteria.MaxAge)
+                                            {
+                                                <option value="@Age">@Age</option>
+                                            }
+                                        </select>
                                     </div>
-                                    <button @onclick="()=>LoadData()" class="lab-btn" type="submit">Search now <i class="icofont-search-2"></i></button>
                                 </div>
                             </div>
                         </div>
-                        <div class="member-wrapper">
-                            <ul class="member-info mb-4">
-                                <li class="all-member">
-                                    <p>Search Count </p>
-                                    <p>@SearchCriteria.Results.Count</p>
-                                </li>
-                                <li class="member-cat">
-                                    <div class="custom-select right w-100">
-                                        <select name="member" id="member-cat" class="">
-                                            <option value="0">Newest Registerd</option>
-                                            <option value="1">Oldest</option>
-                                            <option value="2">Popular</option>
-                                            <option value="3">Most Active</option>
-                                        </select>
-                                    </div>
-                                </li>
-                            </ul>
+                        <div class="">
+                            <div class="search-location-selectors-search">
+                                @* <LocationLocator info={searchcriteria}></LocationLocator> *@
+                                Location
+                            </div>
                         </div>
-                        <div class="row justify-content-center g-3 g-md-4 ">
-                            @if (SearchCriteria.Results.Count == 0)
-                            {
-                                <div class="highlight-error text-center">No Results Found</div>
-                            }
-                            else
-                            {
-                                foreach (var profile in SearchCriteria.Results)
-                                {
-                                    <ProfileItem Profile=@profile></ProfileItem>
-                                }
-                            }
-                        </div>
+                        <button @onclick="()=>LoadData()" class="lab-btn" type="submit">Search now <i class="icofont-search-2"></i></button>
                     </div>
-                </section>
- }
+                </div>
+            </div>
+            <div class="member-wrapper">
+                <ul class="member-info mb-4">
+                    <li class="all-member">
+                        <p>Search Count </p>
+                        <p>@SearchCriteria.Results.Count</p>
+                    </li>
+                    <li class="member-cat">
+                        <div class="custom-select right w-100">
+                            <select name="member" id="member-cat" class="">
+                                <option value="0">Newest Registerd</option>
+                                <option value="1">Oldest</option>
+                                <option value="2">Popular</option>
+                                <option value="3">Most Active</option>
+                            </select>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="row justify-content-center g-3 g-md-4 ">
+                @if (SearchCriteria.Results.Count == 0)
+                {
+                    <div class="highlight-error text-center">No Results Found</div>
+                }
+                else
+                {
+                    foreach (var profile in SearchCriteria.Results)
+                    {
+                        <ProfileItem Profile=@profile></ProfileItem>
+                    }
+                }
+            </div>
+        </div>
+    </section>
+}
 
 @code {
 

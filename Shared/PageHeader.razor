@@ -1,0 +1,156 @@
+﻿@inject NavigationManager NavigationManager
+
+<section class="page-header-section style-1">
+    <div class="container">
+        <div class="page-header-content">
+            <div class="page-header-inner">
+                <div class="page-title">
+                    <h2>TuruLav @GetHeaderTitle() Page</h2>
+                </div>
+                <ol class="breadcrumb">
+                    <li><a @onclick="()=>Navigate(string.Empty)">Home</a></li>
+                    <li>@(GetBreadCrumbTitle().Length > 0 ? ">" : "")</li>
+                    <li class="active">
+                        <a @onclick="()=>Navigate(GetBreadCrumbPath())">@GetBreadCrumbTitle()</a>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+@code {
+ 
+    private void Navigate(string path)
+    {
+        NavigationManager.NavigateTo(string.IsNullOrEmpty(path) ? "/home": path);
+    }
+
+    private string GetBreadCrumbPath () 
+    {
+
+        string path = string.Empty ;
+        var location = NavigationManager.Uri.Replace(NavigationManager.BaseUri, string.Empty);
+        switch (location) {
+
+            case "home":
+                path = "";
+                break;
+
+            case "login":
+                path = "/login";
+                break;
+
+            case "register":
+                path = "/register";
+                break;
+
+            case "editprofile":
+                path = "/editprofile";
+                break;
+
+            case "createprofile":
+                path = "/createprofile";
+                break;
+
+            case "search":
+                path = "/search";
+                break;
+
+            case "completedprofile":
+                path = "/completedprofile";
+                break;
+
+            default:
+                path = "";
+                break;
+        }
+        return path;
+    }
+
+    private string GetHeaderTitle  ()
+    {
+
+        var path = string.Empty;
+        var location = NavigationManager.Uri.Replace(NavigationManager.BaseUri, string.Empty); 
+        switch (location) {
+
+            case "home":
+                path = "";
+                break;
+
+            case "login":
+                path = "Login";
+                break;
+
+            case "register":
+                path = "Register";
+                break;
+
+            case "editprofile":
+                path = "Edit Profile";
+                break;
+
+            case "createprofile":
+                path = "CreateProfile";
+                break;
+
+            case "search":
+                path = "Search";
+                break;
+
+            case "completedprofile":
+                path = "Profile Completed";
+                break;
+
+            default:
+                path = "";
+                break;
+        }
+        return path;
+    }
+
+    private string GetBreadCrumbTitle  ()  
+    {
+
+        var path = string.Empty ;
+        var location = NavigationManager.Uri.Replace(NavigationManager.BaseUri, string.Empty);
+        switch (location) {
+
+        case "home":
+            path = "";
+            break;
+
+        case "login":
+            path = "Login";
+            break;
+
+        case "register":
+            path = "Register";
+            break;
+
+        case "editprofile":
+            path = "Edit Profile";
+            break;
+
+        case "createprofile":
+            path = "CreateProfile";
+            break;
+
+        case "search":
+            path = "Search";
+            break;
+
+        case "completedprofile":
+            path = "Profile Completed";
+            break;
+
+
+        default:
+            path = "";
+            break;
+    }
+    return path;
+}
+
+}
