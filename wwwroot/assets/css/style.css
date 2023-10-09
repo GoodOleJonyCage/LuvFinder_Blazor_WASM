@@ -40,8 +40,8 @@ Tags: community, couple, creative, dating, groups, love template, matching, memb
 .banner-form .age,
 .banner-form .city,
 .banner-form .interest, .banner-section .section-wrapper .banner-content .intro-form .intro-form-inner .social-list, .header-form .form-container, .header-form, .menu, .header-wrapper .menu-area, .header-wrapper, .header-top-area .left, .header-top-area, .paginations ul li a, .group-search .group-search-btn form, .group-search .group-count, .group-search, .member-filter .member-filter-inner .filter-form, .price-item .price-item-inner .price-bottom ul li {
-  display: flex;
-  flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .footer-section .footer-middle .footer-middle-item-wrapper, .footer-section .footer-middle, .widget.like-member .widget-content .col .image-thumb, .blog-section .main-blog .blog-wrapper .post-item .tags-section .tags li span, .blog-section .main-blog .blog-wrapper .post-item.video-post .post-item-inner .post-thumb .embed-responsive, .blog-section .main-blog .blog-wrapper .post-item.post-slider .post-item-inner .post-thumb .blog-slider, .blog-section .main-blog .blog-wrapper .post-item .post-item-inner .post-content blockquote p, .post-item .post-content .post-author .post-author-inner .author-details .post-status .post-privacy, .create-post .lab-inner .lab-content .post-form .content-type .content-list .image-video,

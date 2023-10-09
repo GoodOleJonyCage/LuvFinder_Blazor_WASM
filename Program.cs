@@ -15,11 +15,13 @@ builder.Services
                .AddScoped<IProfileService, ProfileService>()
                .AddScoped<IChatService, ChatService>()
                .AddScoped<IBlogService, BlogService>()
+               .AddScoped<ISearchService, SearchService>()
                .AddScoped<IHttpService, HttpService>()
                .AddScoped<FriendCountStateContainer, FriendCountStateContainer>()
                .AddScoped<BlogCountStateContainer, BlogCountStateContainer>()
                .AddScoped<FriendProfileStateContainer, FriendProfileStateContainer>()
                .AddScoped<ChatCountStateContainer, ChatCountStateContainer>()
+               .AddScoped<ISearchStateContainer, SearchStateContainer>()
                .AddScoped<ILocalStorageService, LocalStorageService>();
  
 // configure http client

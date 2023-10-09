@@ -1,0 +1,290 @@
+﻿@using LuvFinder_Blazor_WASM.Services;
+@using LuvFinder_ViewModels;
+@inject NavigationManager NavigationManager
+@inject ISearchStateContainer SearchStateContainer
+@inject ISearchService SearchService
+
+@if (Loaded)
+{
+    <aside class="mt-5 mt-xl-0">
+        <div class="widget search-widget">
+            <div class="widget-inner">
+                <div class="widget-title">
+                    <h5>Filter Search Member</h5>
+                </div>
+                <div class="widget-content">
+                    <p>
+                        Serious Dating With TuruLav Your Perfect
+                        Match is Just a Click Away.
+                    </p>
+                    <form action="/" class="banner-form">
+                        <div class="gender">
+                            <div class="custom-select right w-100">
+                                <select @bind="@SearchStateContainer.SearchCriteria.SelectedSeekingGender">
+                                    <option value="0">I am a</option>
+                                    @foreach (var Gender in InitializedSearchCriteria.Genders)
+                                    {
+                                        <option value="@Gender.Id">@Gender.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="person">
+                            <div class="custom-select right w-100">
+                                <select @bind="@SearchStateContainer.SearchCriteria.SelectedGender">
+                                    <option value="0">Looking for a</option>
+                                    @foreach (var Gender in InitializedSearchCriteria.Genders)
+                                    {
+                                        <option value="@Gender.Id">@Gender.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="age">
+                            <div class="custom-select right w-100">
+                                <select @bind="@SearchStateContainer.SearchCriteria.SelectedMaritalStatus">
+                                    <option value="0">Seeking Marital Status</option>
+                                    @foreach (var Status in InitializedSearchCriteria.MaritalStatuses)
+                                    {
+                                        <option value="@Status.Id">@Status.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="age">
+                            <div class="right d-flex justify-content-between w-100">
+                                <div class="custom-select">
+                                    <select @bind="@SearchStateContainer.SearchCriteria.SelectedMinAge">
+                                        <option value="0">Min Age</option>
+                                        @foreach (var Age in @InitializedSearchCriteria.MinAge)
+                                        {
+                                            <option value="@Age">@Age</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="custom-select">
+                                    <select @bind="@SearchStateContainer.SearchCriteria.SelectedMaxAge">
+                                        <option value="0">Max Age</option>
+                                        @foreach (var Age in @InitializedSearchCriteria.MaxAge)
+                                        {
+                                            <option value="@Age">@Age</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            @* <LocationLocator info={searchcriteria}></LocationLocator> *@
+                            Location
+                        </div>
+                        <button @onclick="()=> NavigateToSearch()"
+                                class="">
+                            Find Your Partner
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="widget like-member">
+            <div class="widget-inner">
+                <div class="widget-title">
+                    <h5>you may like</h5>
+                </div>
+                <div class="widget-content">
+                    <div class="row row-cols-3 row-cols-sm-auto g-3">
+                        <div class="col">
+                            <div class="image-thumb">
+                                <a href="#">
+                                    <img src="assets/images/widget/01.jpg"
+                                         alt="img" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="image-thumb">
+                                <a href="#">
+                                    <img src="assets/images/widget/02.jpg"
+                                         alt="img" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="image-thumb">
+                                <a href="#">
+                                    <img src="assets/images/widget/03.jpg"
+                                         alt="img" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="image-thumb">
+                                <a href="#">
+                                    <img src="assets/images/widget/04.jpg"
+                                         alt="img" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="image-thumb">
+                                <a href="#">
+                                    <img src="assets/images/widget/05.jpg"
+                                         alt="img" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="image-thumb">
+                                <a href="#">
+                                    <img src="assets/images/widget/06.jpg"
+                                         alt="img" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="image-thumb">
+                                <a href="#">
+                                    <img src="assets/images/widget/07.jpg"
+                                         alt="img" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="image-thumb">
+                                <a href="#">
+                                    <img src="assets/images/widget/08.jpg"
+                                         alt="img" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="image-thumb">
+                                <a href="#">
+                                    <img src="assets/images/widget/09.jpg"
+                                         alt="img" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="widget active-group">
+            <div class="widget-inner">
+                <div class="widget-title">
+                    <h5>join the group</h5>
+                </div>
+                <div class="widget-content">
+                    <div class="group-item lab-item">
+                        <div class="lab-inner d-flex flex-wrap align-items-center">
+                            <div class="lab-content w-100">
+                                <h6>Active Group A1</h6>
+                                <p>
+                                    Colabors atively fabcate best breed and
+                                    apcations through visionary
+                                </p>
+                                <ul class="img-stack d-flex">
+                                    <li>
+                                        <img src="assets/images/group/group-mem/01.png"
+                                             alt="member-img" />
+                                    </li>
+                                    <li>
+                                        <img src="assets/images/group/group-mem/02.png"
+                                             alt="member-img" />
+                                    </li>
+                                    <li>
+                                        <img src="assets/images/group/group-mem/03.png"
+                                             alt="member-img" />
+                                    </li>
+                                    <li>
+                                        <img src="assets/images/group/group-mem/04.png"
+                                             alt="member-img" />
+                                    </li>
+                                    <li>
+                                        <img src="assets/images/group/group-mem/05.png"
+                                             alt="member-img" />
+                                    </li>
+                                    <li>
+                                        <img src="assets/images/group/group-mem/06.png"
+                                             alt="member-img" />
+                                    </li>
+                                    <li class="bg-theme">12+</li>
+                                </ul>
+                                <div class="test">
+                                    <a href="profile.html"
+                                       class="lab-btn">
+                                        <i class="icofont-users-alt-5"></i>
+                                        View Group
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group-item lab-item">
+                        <div class="lab-inner d-flex flex-wrap align-items-center">
+                            <div class="lab-content w-100">
+                                <h6>Active Group A2</h6>
+                                <p>
+                                    Colabors atively fabcate best breed and
+                                    apcations through visionary
+                                </p>
+                                <ul class="img-stack d-flex">
+                                    <li>
+                                        <img src="assets/images/group/group-mem/01.png"
+                                             alt="member-img" />
+                                    </li>
+                                    <li>
+                                        <img src="assets/images/group/group-mem/02.png"
+                                             alt="member-img" />
+                                    </li>
+                                    <li>
+                                        <img src="assets/images/group/group-mem/03.png"
+                                             alt="member-img" />
+                                    </li>
+                                    <li>
+                                        <img src="assets/images/group/group-mem/04.png"
+                                             alt="member-img" />
+                                    </li>
+                                    <li>
+                                        <img src="assets/images/group/group-mem/05.png"
+                                             alt="member-img" />
+                                    </li>
+                                    <li>
+                                        <img src="assets/images/group/group-mem/06.png"
+                                             alt="member-img" />
+                                    </li>
+                                    <li class="bg-theme">16+</li>
+                                </ul>
+                                <div class="test">
+                                    <a href="profile.html"
+                                       class="lab-btn">
+                                        <i class="icofont-users-alt-5"></i>
+                                        View Group
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+}
+@code {
+
+    private SearchCriteria InitializedSearchCriteria { get; set; } = new SearchCriteria();
+    private bool Loaded { get; set; }
+
+    protected async override void OnInitialized()
+    {
+        InitializedSearchCriteria = await SearchService.InitializeSearchCriteria();
+        Loaded = true;
+        StateHasChanged();
+    }
+
+    private void NavigateToSearch()
+    {
+        NavigationManager.NavigateTo("/search");
+    }
+
+}
