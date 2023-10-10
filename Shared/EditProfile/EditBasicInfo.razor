@@ -62,8 +62,9 @@
             <li>
                 <p class="info-name">Date of Birth</p>
                 <div class="info-details">
-                    Calender
-                    @* <Calendar onChange={(e) => { info.dob = e.toJSON().slice(0, 10).replace(/-/g, '/'); }} defaultValue={info.dob} /> *@
+                    <div class="calender-container">
+                        <MudDatePicker Label="" @bind-Date="@UserInfo.DOB" DisableToolbar="true" />
+                    </div>
                 </div>
             </li>
             <li>

@@ -782,4 +782,25 @@ ul li.nocheckmark:before {
 }
 /*mudAutocomplete*/
 
+ /*mudcalender*/
+
+.calender-container {
+    width: 250px;
+    margin-top: -20px;
+}
+
+.mud-picker-calendar-header-switch {
+    background-color: #210053;
+    color: white;
+}
+.mud-picker-month-container .mud-picker-month:hover {
+    background-color: #210053;
+}
+.mud-picker-year-container {
+    background-color: #210053;
+}
+.mud-picker-month-container {
+    background-color: #210053;
+}
  
+/*mudcalender*/
