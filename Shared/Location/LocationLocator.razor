@@ -43,7 +43,7 @@
 
 @code {
 
-     
+
     MudAutocomplete<Country> AutocompleteCountry { get; set; }
     MudAutocomplete<Region> AutocompleteRegion { get; set; }
     MudAutocomplete<City> AutocompleteCity { get; set; }
@@ -58,7 +58,7 @@
             };
             AutocompleteCountry.ForceRender(true);
         }
-       
+
         if (SearchStateContainer.SearchCriteria.RegionID > 0)
         {
             AutocompleteRegion.Value = new Region()
@@ -68,7 +68,7 @@
                 };
             AutocompleteRegion.ForceRender(true);
         }
-        
+
         if (SearchStateContainer.SearchCriteria.CityID > 0)
         {
             AutocompleteCity.Value = new City()
@@ -82,13 +82,41 @@
 
     private void CountryChanged()
     {
-         SearchStateContainer.SearchCriteria.CountryID = AutocompleteCountry.Value.ID;
-         SearchStateContainer.SearchCriteria.CountryName = AutocompleteCountry.Value.Name;
+        SearchStateContainer.SearchCriteria.CountryID = AutocompleteCountry.Value.ID;
+        SearchStateContainer.SearchCriteria.CountryName = AutocompleteCountry.Value.Name;
+        
+        //clearing region
+        if (AutocompleteRegion.Value != null)
+        {
+            SearchStateContainer.SearchCriteria.RegionID = 0;
+            SearchStateContainer.SearchCriteria.RegionName = string.Empty;
+            AutocompleteRegion.Value.ID = 0;
+            AutocompleteRegion.Value.Name = string.Empty;
+            AutocompleteRegion.ForceRender(true);
+        }
+        //clearing city
+        if (AutocompleteCity.Value != null)
+        {
+            SearchStateContainer.SearchCriteria.CityID = 0;
+            SearchStateContainer.SearchCriteria.CityName = string.Empty;
+            AutocompleteCity.Value.ID = 0;
+            AutocompleteCity.Value.Name = string.Empty;
+            AutocompleteCity.ForceRender(true);
+        }
     }
     private void RegionChanged()
     {
         SearchStateContainer.SearchCriteria.RegionID = AutocompleteRegion.Value.ID;
         SearchStateContainer.SearchCriteria.RegionName = AutocompleteRegion.Value.Name;
+        //clearing city
+        if (AutocompleteCity.Value != null)
+        {
+            SearchStateContainer.SearchCriteria.CityID = 0;
+            SearchStateContainer.SearchCriteria.CityName = string.Empty;
+            AutocompleteCity.Value.ID = 0;
+            AutocompleteCity.Value.Name = string.Empty;
+            AutocompleteCity.ForceRender(true);
+        }
     }
     private void CityChanged()
     {

@@ -84,11 +84,39 @@
     {
         UserInfo.CountryID = AutocompleteCountry.Value.ID;
         UserInfo.CountryName = AutocompleteCountry.Value.Name;
+
+        //clearing region 
+        if (AutocompleteRegion.Value != null)
+        {
+            UserInfo.RegionID = 0;
+            UserInfo.RegionName = string.Empty;
+            AutocompleteRegion.Value.ID = 0;
+            AutocompleteRegion.Value.Name = string.Empty;
+            AutocompleteRegion.ForceRender(true);
+        }
+        //clearing city
+        if (AutocompleteCity.Value != null)
+        {
+            UserInfo.CityID = 0;
+            UserInfo.CityName = string.Empty;
+            AutocompleteCity.Value.ID = 0;
+            AutocompleteCity.Value.Name = string.Empty;
+            AutocompleteCity.ForceRender(true);
+        }
     }
     private void RegionChanged()
     {
         UserInfo.RegionID = AutocompleteRegion.Value.ID;
         UserInfo.RegionName = AutocompleteRegion.Value.Name;
+        //clearing city
+        if (AutocompleteCity.Value != null)
+        {
+            UserInfo.CityID = 0;
+            UserInfo.CityName = string.Empty;
+            AutocompleteCity.Value.ID = 0;
+            AutocompleteCity.Value.Name = string.Empty;
+            AutocompleteCity.ForceRender(true);
+        }
     }
     private void CityChanged()
     {
