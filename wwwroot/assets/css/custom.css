@@ -774,6 +774,12 @@ ul li.nocheckmark:before {
     gap:5px;
 }
 
+.autocomplete-item-profile {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 5px;
+}
 /*mudAutocomplete*/
 
  
