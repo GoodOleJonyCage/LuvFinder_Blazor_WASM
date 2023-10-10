@@ -19,6 +19,9 @@ namespace LuvFinder_Blazor_WASM.Services
         Task<FriendActivity> StartFriendShip(string usernameFrom, string usernameTo);
         Task<int> GetFriendCount(string username);
         Task<List<LuvFinder_ViewModels.UserInfo>> GetFriendProfiles(string username);
+        Task<List<LuvFinder_ViewModels.Country>> LoadCountries();
+        Task<List<LuvFinder_ViewModels.Region>> LoadRegions(int countryid);
+        Task<List<LuvFinder_ViewModels.City>> LoadCitiesByName(int regionid,string cityname);
     }
 
     public class ProfileService : IProfileService
@@ -86,6 +89,20 @@ namespace LuvFinder_Blazor_WASM.Services
         public async Task<List<UserInfo>> GetFriendProfiles(string username)
         {
             return await _httpService.Post<List<LuvFinder_ViewModels.UserInfo>>("/profile/friends", new { username });
+        }
+
+        public async Task<List<LuvFinder_ViewModels.Country>> LoadCountries()
+        {
+            return await _httpService.Get<List<LuvFinder_ViewModels.Country>>("/profile/countries" );
+        }
+        public async Task<List<LuvFinder_ViewModels.Region>> LoadRegions(int countryid)
+        {
+            return await _httpService.Post<List<LuvFinder_ViewModels.Region>>("/profile/regions", new { countryid });
+        }
+
+        public async Task<List<LuvFinder_ViewModels.City>> LoadCitiesByName(int regionid, string cityname)
+        {
+            return await _httpService.Post<List<LuvFinder_ViewModels.City>> ("/profile/citiesbyname", new { regionid, cityname });
         }
     }
 }

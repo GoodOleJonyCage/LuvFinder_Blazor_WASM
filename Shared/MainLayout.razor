@@ -1,9 +1,7 @@
 ﻿@using LuvFinder_Blazor_WASM.Services;
 @inject IAuthenticationService AuthenticationService
 @inherits LayoutComponentBase
-
-
-
+ 
 @* Header *@
 <header class="header-section">
     <div class="header-top">
@@ -123,3 +121,7 @@
 @* so that the header is always visible *@
 <script src="../assets/js/functions.js"></script>
 @Body
+
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />

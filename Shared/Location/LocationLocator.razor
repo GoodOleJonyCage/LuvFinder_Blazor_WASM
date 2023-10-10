@@ -1,0 +1,132 @@
+﻿@using LuvFinder_ViewModels;
+@using LuvFinder_Blazor_WASM.Services;
+@inject IProfileService ProfileService
+@inject ISearchStateContainer SearchStateContainer
+
+<div class="autocomplete-container ">
+    <div class="autocomplete-item">
+        <div>Country</div>
+        <div>
+            <MudAutocomplete 
+                ValueChanged="CountryChanged"
+                @ref="AutocompleteCountry"
+                            T="LuvFinder_ViewModels.Country"
+                            SearchFunc="SearchCountries"
+                            ToStringFunc="@(e => e == null ? null : $"{e.Name}")" />
+
+        </div>
+    </div>
+    <div class="autocomplete-item">
+        <div>Region</div>
+        <div>
+            <MudAutocomplete 
+                ValueChanged="RegionChanged"
+                @ref="AutocompleteRegion"
+                             T="LuvFinder_ViewModels.Region"
+                             SearchFunc="SearchRegions"
+                             ToStringFunc="@(e=> e==null?null : $"{e.Name}")" />
+        </div>
+    </div>
+    <div class="autocomplete-item">
+        <div>City</div>
+        <div>
+            <MudAutocomplete 
+                ValueChanged="CityChanged"
+                @ref="AutocompleteCity" 
+                T="City" 
+                SearchFunc="SearchCities"
+                ToStringFunc="@(e=> e==null?null : $"{e.Name}")" />
+       </div>
+    </div>
+</div>
+
+
+@code {
+
+     
+    MudAutocomplete<Country> AutocompleteCountry { get; set; }
+    MudAutocomplete<Region> AutocompleteRegion { get; set; }
+    MudAutocomplete<City> AutocompleteCity { get; set; }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (SearchStateContainer.SearchCriteria.CountryID > 0)
+        {
+            AutocompleteCountry.Value =  new Country() { 
+                ID = SearchStateContainer.SearchCriteria.CountryID, 
+                Name = SearchStateContainer.SearchCriteria.CountryName
+            };
+            AutocompleteCountry.ForceRender(true);
+        }
+       
+        if (SearchStateContainer.SearchCriteria.RegionID > 0)
+        {
+            AutocompleteRegion.Value = new Region()
+                {
+                    ID = SearchStateContainer.SearchCriteria.RegionID,
+                    Name = SearchStateContainer.SearchCriteria.RegionName
+                };
+            AutocompleteRegion.ForceRender(true);
+        }
+        
+        if (SearchStateContainer.SearchCriteria.CityID > 0)
+        {
+            AutocompleteCity.Value = new City()
+                {
+                    ID = SearchStateContainer.SearchCriteria.CityID,
+                    Name = SearchStateContainer.SearchCriteria.CityName
+                };
+            AutocompleteCity.ForceRender(true);
+        }
+    }
+
+    private void CountryChanged()
+    {
+         SearchStateContainer.SearchCriteria.CountryID = AutocompleteCountry.Value.ID;
+         SearchStateContainer.SearchCriteria.CountryName = AutocompleteCountry.Value.Name;
+    }
+    private void RegionChanged()
+    {
+        SearchStateContainer.SearchCriteria.RegionID = AutocompleteRegion.Value.ID;
+        SearchStateContainer.SearchCriteria.RegionName = AutocompleteRegion.Value.Name;
+    }
+    private void CityChanged()
+    {
+        SearchStateContainer.SearchCriteria.CityID = AutocompleteCity.Value.ID;
+        SearchStateContainer.SearchCriteria.CityName = AutocompleteCity.Value.Name;
+    }
+
+    private async Task<IEnumerable<Country>> SearchCountries(string value)
+    {
+        List<Country> countries = await ProfileService.LoadCountries();
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+            return new Country[0];
+        return countries.Where(x => x.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    private async Task<IEnumerable<Region>> SearchRegions(string value)
+    {
+        List<Region> regions = await ProfileService.LoadRegions(AutocompleteCountry.Value.ID);
+        // value.Length > 3 ?
+        //             await ProfileService.LoadRegions(AutocompleteCountry.Value.ID) : new List<Region>();
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+            return new Region[0];
+        return regions.Where(x => x.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    private async Task<IEnumerable<City>> SearchCities(string value)
+    {
+        List<City> cities = await ProfileService.LoadCitiesByName(AutocompleteRegion.Value.ID, value);
+        // value.Length > 3 ?
+        //             await ProfileService.LoadCitiesByName(AutocompleteRegion.Value.ID, value) : new List<City>();
+        
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+            return new City[0];
+        return cities.Where(x => x.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+
+    }
+}

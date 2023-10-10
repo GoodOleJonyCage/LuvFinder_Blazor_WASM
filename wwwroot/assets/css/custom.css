@@ -1,5 +1,5 @@
 ﻿body div {
-    color: white;
+    /*color: white;*/
 }
 
 body a {
@@ -750,3 +750,30 @@ ul li.nocheckmark:before {
     .pointer{
         cursor:pointer;
     }
+
+
+/*mudAutocomplete*/
+
+.mud-input {
+    background-color: white;
+}
+.mud-select-input{
+    padding:4px;
+}
+
+.autocomplete-container {
+   display:flex;
+   flex-direction:column;
+   margin:10px 0;
+}
+
+.autocomplete-item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap:5px;
+}
+
+/*mudAutocomplete*/
+
+ 
