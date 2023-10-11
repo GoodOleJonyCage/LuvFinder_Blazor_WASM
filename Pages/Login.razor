@@ -6,36 +6,66 @@
 @inject NavigationManager NavigationManager
 
 <PageHeader></PageHeader>
-<div class="col-md-6 offset-md-3 mt-5">
-    <div class="alert alert-info">
-        Username: test<br />
-        Password: test
-    </div>
-    <div class="card">
-        <h4 class="card-header">Blazor WebAssembly JWT Login Example</h4>
-        <div class="card-body">
-            <EditForm Model="@model" OnValidSubmit="HandleValidSubmit">
-                <DataAnnotationsValidator />
-                <div class="form-group">
-                    <label>Username</label>
-                    <InputText @bind-Value="model.Username" class="form-control" />
-                    <ValidationMessage For="@(() => model.Username)" />
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <InputText @bind-Value="model.Password" type="password" class="form-control" />
-                    <ValidationMessage For="@(() => model.Password)" />
-                </div>
-                <button class="btn btn-primary">
-                    @if (loading) {
-                        <span class="spinner-border spinner-border-sm mr-1"></span>
+
+
+<div class="login-section padding-tb">
+    <div class=" container">
+        <div class="account-wrapper">
+            <h3 className="title">Login</h3>
+            <div class="account-form">
+                <EditForm Model="@model" OnValidSubmit="HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <div class="form-group">
+                        @* <label class="login-label">Username</label> *@
+                        <InputText @bind-Value="model.Username" placeholder="User Name" />
+                        <ValidationMessage For="@(() => model.Username)" />
+                    </div>
+                    <div class="form-group">
+                       @*  <label class="login-label">Password</label> *@
+                        <InputText @bind-Value="model.Password" type="password" placeholder="Password" />
+                        <ValidationMessage For="@(() => model.Password)" />
+                    </div>
+                    <div class="form-group">
+                        <button class="d-block lab-btn">
+                            @if (loading)
+                            {
+                                <span class="spinner-border spinner-border-sm mr-1"></span>
+                            }
+                            Login
+                        </button>
+                    </div>
+                    @if (!string.IsNullOrEmpty(error))
+                    {
+                        <div class="alert alert-danger mt-3 mb-0">@error</div>
                     }
-                    Login
-                </button>
-                @if (!string.IsNullOrEmpty(error)) {
-                    <div class="alert alert-danger mt-3 mb-0">@error</div>
-                }
-            </EditForm>
+                </EditForm>
+            </div>
+            <div class="account-bottom">
+                <span class="d-block cate pt-10">
+                    Don’t Have any Account? <a href="/register">
+                        Sign Up
+                    </a>
+                </span>
+                <span class="or"><span>or</span></span>
+                <h5 class="subtitle">Login With Social Media</h5>
+                <ul class="social-media social-color lab-ul d-flex justify-content-center">
+                    <li>
+                        <a href="/#" class="facebook"><i class="icofont-facebook"></i></a>
+                    </li>
+                    <li>
+                        <a href="/#" class="twitter"><i class="icofont-twitter"></i></a>
+                    </li>
+                    <li>
+                        <a href="/#" class="linkedin"><i class="icofont-linkedin"></i></a>
+                    </li>
+                    <li>
+                        <a href="/#" class="instagram"><i class="icofont-instagram"></i></a>
+                    </li>
+                    <li>
+                        <a href="/#" class="pinterest"><i class="icofont-pinterest"></i></a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
@@ -45,7 +75,7 @@
     private bool loading;
     private string error;
 
- 
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         // redirect to home if already logged in
@@ -55,7 +85,7 @@
         }
     }
 
-  
+
     private async void HandleValidSubmit()
     {
         loading = true;

@@ -804,3 +804,11 @@ ul li.nocheckmark:before {
 }
  
 /*mudcalender*/
+
+.login-label{
+    margin:10px 0;
+}
+.form-group .validation-message {
+    margin: 10px 0;
+}
+ 

@@ -64,7 +64,7 @@
 
                                 <li><a href="login.html" class="active">Login</a></li>
 
-                                <li><a href="signup.html">Sign Up</a></li>
+                                <li><a href="/register">Sign Up</a></li>
 
                                 <li><a href="pricing-plan.html">Pricing Plan</a></li>
 
@@ -93,12 +93,12 @@
                     </ul>
                     <div class="login-signout-container">
                         <button class="username">
-                            <NavLink href="@(AuthenticationService.User == null ? "login": "/editprofile")">
+                            <NavLink href="@(AuthenticationService.User == null ? "login": "editprofile")">
                                 <i class="icofont-user"></i> <span>@(AuthenticationService.User == null ? "LOG IN" : AuthenticationService.User.FirstName + AuthenticationService.User.LastName)</span>
                             </NavLink>
                         </button>
                         <button class="logout">
-                            <NavLink href="logout">
+                            <NavLink href="@(AuthenticationService.User == null ? "register": "logout")">
                                 <i class="icofont-users"></i> <span>@(AuthenticationService.User == null ? "SIGN UP" : "LOG OUT")</span>
                             </NavLink>
                         </button>
