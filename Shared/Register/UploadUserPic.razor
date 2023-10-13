@@ -1,0 +1,96 @@
+﻿@page "/uploadpic"
+@using LuvFinder_Blazor_WASM.Services;
+@inject NavigationManager NavigationManager
+@inject IProfileService ProfileService
+@inject RegisterUserStateContainer RegisterUserStateContainer
+
+<PageHeader></PageHeader>
+<div class="container">
+    <div class="form-group text-center ">
+        <div class="upload-page-title">A Picture is worth a thousand words</div>
+        <div class="upload-page-sub-title">Upload your photo now!</div>
+        <div class="image-container text-center col-6" style="margin:0 auto">
+            <img src=@imgSrc   />
+            <InputFile accept=".jpg,.jpeg,.pjpeg,.gif,.x-png,.png"
+                       class="form-control" OnChange="@OnInputFileChange" />
+            <div style="display:flex;flex-direction:column;gap:5px;justify-content:center">
+                <button @onclick="()=>ClearImage()" class="lab-btn d-block  btn-sm ">
+                    Revert Image <i class="icofont-paper-plane"></i>
+                </button>
+                <div class="highlight-error">@Error</div>
+                <button class="lab-btn d-block upload-btn " @onclick="()=>UpLoadPic()">Upload<i class="icofont-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    const string NOIMAGE = "assets/images/blog/no-image-available.jpg";
+    IBrowserFile imgFile;
+    string imgSrc = NOIMAGE;
+    public string Error { get; set; } = string.Empty;
+
+    private async Task ClearImage()
+    {
+        imgFile = null;
+        imgSrc = NOIMAGE;
+        StateHasChanged();
+    }
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        imgFile = e.File;
+        if (LuvFinder_Blazor_WASM.Helpers.Utilities.IsImage(e.File.ContentType))
+        {
+            //preview uploaded image
+            using MemoryStream ms = new();
+            var resized = await e.File.RequestImageFileAsync(e.File.ContentType, maxWidth: 500, maxHeight: 800);
+            using Stream fileStream = resized.OpenReadStream();
+            await fileStream.CopyToAsync(ms);
+            imgSrc = $"data:{e.File.ContentType};base64,{Convert.ToBase64String(ms.ToArray())}";
+
+            StateHasChanged();
+        }
+    }
+
+    private async void UpLoadPic()
+    {
+       
+        Error = string.Empty;
+        try
+        {
+            if (imgFile == null)
+            {
+                Error = "Please upload a file";
+            }
+            else if (!LuvFinder_Blazor_WASM.Helpers.Utilities.IsImage(imgFile.ContentType))
+            {
+                Error = "Please upload an image file";
+            }
+            else if (LuvFinder_Blazor_WASM.Helpers.Utilities.IsImage(imgFile.ContentType))
+            {
+                using MemoryStream ms = new();
+                var resized = await imgFile.RequestImageFileAsync(imgFile.ContentType, maxWidth: 500, maxHeight: 800);
+                using Stream fileStream = resized.OpenReadStream();
+                await fileStream.CopyToAsync(ms);
+                try
+                {
+                    string result = await ProfileService.UploadUserPic(RegisterUserStateContainer.UserName, ms.ToArray());
+                    NavigationManager.NavigateTo("/completedprofile");
+                }
+                catch (Exception exc)
+                {
+                    Error = exc.Message;
+                }
+            }
+        }
+        catch (Exception exc)
+        {
+            Error = exc.Message;
+        }
+        StateHasChanged();
+    }
+
+  
+}

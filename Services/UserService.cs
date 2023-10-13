@@ -5,6 +5,8 @@ namespace LuvFinder_Blazor_WASM.Services
 {
     public interface IUserService
     {
+
+        Task<bool> Register(string username,string password);
         Task<IEnumerable<LuvFinder_ViewModels.User>> GetAll();
     }
 
@@ -20,6 +22,11 @@ namespace LuvFinder_Blazor_WASM.Services
         public async Task<IEnumerable<LuvFinder_ViewModels.User>> GetAll()
         {
             return await _httpService.Get<IEnumerable<LuvFinder_ViewModels.User>>("/users");
+        }
+
+        public async Task<bool> Register(string username, string password)
+        {
+            return await _httpService.Post<bool>("/user/register", new { username, password });
         }
     }
 }

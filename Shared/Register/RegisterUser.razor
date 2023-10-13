@@ -1,0 +1,99 @@
+﻿@using LuvFinder_Blazor_WASM.Services;
+@inject IAuthenticationService AuthenticationService
+@inject NavigationManager NavigationManager
+@inject IUserService UserService
+@inject RegisterUserStateContainer RegisterUserStateContainer
+
+<div class="login-section padding-tb">
+    <div class="container">
+        <div class="account-wrapper">
+            <h3 class="title">Register Now</h3>
+            <div class="account-form">
+                <div class="form-group">
+                    <input type="text" placeholder="Email" name="email"
+                    @bind="UserName"
+                    class="@(Submitted && UserName.Length==0?"highlight-field" : "")"
+                    />
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Password" name="password"
+                    @bind="Password"
+                    class="@(Submitted && Password.Length==0?"highlight-field" : "")"
+                    />
+                </div>
+                <div class="form-group highlight-error">
+                    @Result
+                </div>
+                <div class="form-group">
+                    @if(!BtnPressed)
+                    {
+                        <button class="d-block lab-btn" type="Submit" @onclick="handleSubmit">
+                            Get Started Now
+                        </button>
+                    }
+                </div>
+            </div>
+            <div class="account-bottom">
+                <span class="d-block cate pt-10">Are you a member? <a href="login.html">Login</a></span>
+                <span class="or"><span>or</span></span>
+                <h5 class="subtitle">Register With Social Media</h5>
+                <ul class="social-media social-color justify-content-center d-flex lab-ul">
+                    <li>
+                        <a href="/#" class="facebook"><i class="icofont-facebook"></i></a>
+                    </li>
+                    <li>
+                        <a href="/#" class="twitter"><i class="icofont-twitter"></i></a>
+                    </li>
+                    <li>
+                        <a href="/#" class="linkedin"><i class="icofont-linkedin"></i></a>
+                    </li>
+                    <li>
+                        <a href="/#" class="instagram"><i class="icofont-instagram"></i></a>
+                    </li>
+                    <li>
+                        <a href="/#" class="pinterest"><i class="icofont-pinterest"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>;
+
+@code {
+    public string UserName { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
+    public string Result { get; set; } = string.Empty;
+    public bool Submitted { get; set; }
+    public bool BtnPressed { get; set; }
+
+    private async void handleSubmit()
+    {
+        Result = string.Empty;
+        Submitted = true ;
+        BtnPressed = true;
+
+        if (UserName.Length > 0 && Password.Length > 0)
+        {
+            try
+            {
+                var IsRegistered = await UserService.Register(UserName, Password);
+                if (IsRegistered){
+                    RegisterUserStateContainer.UserName = UserName;
+                    NavigationManager.NavigateTo("/createprofile");
+                }
+
+            }
+            catch (Exception exc)
+            {
+                Result = exc.Message;
+                BtnPressed = false;
+            }
+        }
+        else
+        {
+            BtnPressed = false;
+        }
+        StateHasChanged();
+    }
+
+}

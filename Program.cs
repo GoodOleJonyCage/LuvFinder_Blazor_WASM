@@ -25,6 +25,7 @@ builder.Services
                .AddScoped<BlogCountStateContainer, BlogCountStateContainer>()
                .AddScoped<FriendProfileStateContainer, FriendProfileStateContainer>()
                .AddScoped<ChatCountStateContainer, ChatCountStateContainer>()
+               .AddScoped<RegisterUserStateContainer, RegisterUserStateContainer>()
                .AddScoped<ISearchStateContainer, SearchStateContainer>()
                .AddScoped<ILocalStorageService, LocalStorageService>();
  

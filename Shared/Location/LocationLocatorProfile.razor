@@ -147,14 +147,17 @@
 
     private async Task<IEnumerable<City>> SearchCities(string value)
     {
-        List<City> cities = await ProfileService.LoadCitiesByName(AutocompleteRegion.Value.ID, value);
-        // value.Length > 3 ?
-        //             await ProfileService.LoadCitiesByName(AutocompleteRegion.Value.ID, value) : new List<City>();
+        if (value.Length > 4)
+        {
+            List<City> cities = await ProfileService.LoadCitiesByName(AutocompleteRegion.Value.ID, value);
+            // value.Length > 3 ?
+            //             await ProfileService.LoadCitiesByName(AutocompleteRegion.Value.ID, value) : new List<City>();
 
-        // if text is null or empty, show complete list
-        if (string.IsNullOrEmpty(value))
-            return new City[0];
-        return cities.Where(x => x.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase));
-
+            // if text is null or empty, show complete list
+            if (string.IsNullOrEmpty(value))
+                return new City[0];
+            return cities.Where(x => x.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+        }
+        return new City[0];
     }
 }

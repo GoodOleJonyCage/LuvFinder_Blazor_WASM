@@ -1,5 +1,6 @@
 ﻿using LuvFinder_ViewModels;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace LuvFinder_Blazor_WASM.Services
@@ -22,6 +23,8 @@ namespace LuvFinder_Blazor_WASM.Services
         Task<List<LuvFinder_ViewModels.Country>> LoadCountries();
         Task<List<LuvFinder_ViewModels.Region>> LoadRegions(int countryid);
         Task<List<LuvFinder_ViewModels.City>> LoadCitiesByName(int regionid,string cityname);
+        Task<List<ProfileQuestion>> ProfileQuestionnaire();
+        Task<string> UploadUserPic(string username, byte[]? bytes);
     }
 
     public class ProfileService : IProfileService
@@ -104,5 +107,16 @@ namespace LuvFinder_Blazor_WASM.Services
         {
             return await _httpService.Post<List<LuvFinder_ViewModels.City>> ("/profile/citiesbyname", new { regionid, cityname });
         }
+
+        public async Task<List<ProfileQuestion>> ProfileQuestionnaire()
+        {
+            return await _httpService.Get<List<ProfileQuestion>> ("/profile/profilequestionnaire");
+        }
+
+        public async  Task<string> UploadUserPic(string username, byte[]? bytes)
+        {
+            return await _httpService.PostUserPic<string>("/profile/upload", username, bytes);
+        }
     }
 }
+ 

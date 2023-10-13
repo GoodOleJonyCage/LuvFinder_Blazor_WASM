@@ -80,6 +80,9 @@
     [Parameter]
     public UserInfo UserInfo { get; set; } = new UserInfo();
 
+    [Parameter]
+    public bool CreateMode { get; set; }
+
     List<Gender> Genders { get; set; } = new List<Gender>();
 
     List<MaritalStatus> MaritalStatuses { get; set; } = new List<MaritalStatus>();
@@ -89,6 +92,12 @@
     {
         Genders = await ProfileService.GetGenders();
         MaritalStatuses = await ProfileService.GetMaritalStatuses();
-    
+        //for create mode only,bind to first entry in list
+        if (CreateMode)
+        {
+            UserInfo.GenderID = Genders[0].Id;
+            UserInfo.SeekingGenderID = Genders[0].Id;
+            UserInfo.MaritalStatusID = MaritalStatuses[0].Id;
+        }
     }
 }

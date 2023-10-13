@@ -1,0 +1,83 @@
+﻿@page "/createprofile"
+@using LuvFinder_Blazor_WASM.Helpers;
+@using LuvFinder_Blazor_WASM.Services;
+@using LuvFinder_ViewModels;
+@inject IProfileService ProfileService
+@inject IAuthenticationService AuthenticationService
+@inject RegisterUserStateContainer RegisterUserStateContainer
+@inject NavigationManager NavigationManager
+
+<PageHeader></PageHeader>
+<section class="profile-section padding-tb">
+    <div class="container">
+        <EditBasicInfo CreateMode="true" UserInfo="@UserInfo"></EditBasicInfo>
+        <EditProfileQuestions ProfileQuestions="@ProfileQuestions"></EditProfileQuestions>
+    </div>
+</section>
+
+<div class="m-auto">
+    <div class=" text-center  ">
+        <div class="text-success"><b>@Result</b></div>
+        <div class="highlight-error">@Error</div>
+        @foreach (var error in Errors)
+        {
+            <div class="highlight-error">@error</div>
+        }
+    </div>
+    <div class="col-sm-3 m-auto banner-form">
+        <button @onclick="()=>Save()" class="smaller lab-btn" type="Submit">
+            Save Profile
+        </button>
+    </div>
+</div>
+
+@code {
+
+    private UserInfo UserInfo { get; set; } = new UserInfo();
+    public List<ProfileQuestion> ProfileQuestions { get; set; } = new List<ProfileQuestion>();
+
+    public string Result { get; set; }
+    public string Error { get; set; }
+    public List<string> Errors { get; set; } = new List<string>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        try
+        {
+            ProfileQuestions = await ProfileService.ProfileQuestionnaire();
+        }
+        catch (Exception exc)
+        {
+            Error = exc.Message;
+            StateHasChanged();
+        }
+    }
+
+    protected async void Save()
+    {
+        Result = Error = string.Empty;
+        Errors.Clear();
+
+        try
+        {
+            var saved = await ProfileService.SaveProfile(RegisterUserStateContainer.UserName, UserInfo, ProfileQuestions);
+            if (saved)
+            {
+                Result = "Changes Saved";
+                NavigationManager.NavigateTo("/uploadpic");
+            }
+        }
+        catch (Exception exc)
+        {
+            if (exc.Message.Contains("["))//if an array
+            {
+                Errors = System.Text.Json.JsonSerializer.Deserialize<List<string>>(exc.Message);
+            }
+            else
+            {
+                Error = exc.Message;
+            }
+        }
+        StateHasChanged();
+    }
+}
