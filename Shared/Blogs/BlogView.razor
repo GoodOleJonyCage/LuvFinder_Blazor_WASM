@@ -5,7 +5,7 @@
 
 @if (SelectedBlogID == NO_BLOG_SELECTED && SelectedEditBlogID == NO_BLOG_SELECTED && !NewBlogView)
 {
-    @if (UserName == AuthenticationService.User.UserName)
+    @if (UserName == AuthenticationService.User?.UserName)
     {
         <button class="lab-btn btn-sm " style="margin-bottom:10px;" @onclick="()=>ShowNewBlogView(true)">Create new Blog</button>
     }
