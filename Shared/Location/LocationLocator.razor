@@ -38,8 +38,8 @@
                 ToStringFunc="@(e=> e==null?null : $"{e.Name}")" />
        </div>
     </div>
+    <button @onclick="(e) => { ResetLocator(); }">Reset Location</button>
 </div>
-
 
 @code {
 
@@ -48,6 +48,32 @@
     MudAutocomplete<Region> AutocompleteRegion { get; set; }
     MudAutocomplete<City> AutocompleteCity { get; set; }
 
+
+
+    public void ResetLocator()
+    {
+        SearchStateContainer.SearchCriteria.CountryID = 0;
+        SearchStateContainer.SearchCriteria.CountryName = string.Empty;
+         AutocompleteCountry.Value.ID = 0;
+         AutocompleteCountry.Value.Name = string.Empty;
+        
+        SearchStateContainer.SearchCriteria.RegionID = 0;
+        SearchStateContainer.SearchCriteria.RegionName = string.Empty;
+        AutocompleteRegion.Value.ID = 0;
+        AutocompleteRegion.Value.Name = string.Empty;
+
+        SearchStateContainer.SearchCriteria.CityID = 0;
+        SearchStateContainer.SearchCriteria.CityName = string.Empty;
+        AutocompleteCity.Value.ID = 0;
+        AutocompleteCity.Value.Name = string.Empty;
+        
+        StateHasChanged();
+        
+        AutocompleteCountry.ForceRender(true);
+        AutocompleteRegion.ForceRender(true);
+        AutocompleteCity.ForceRender(true);
+    }
+    
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
         if (SearchStateContainer.SearchCriteria.CountryID > 0)
